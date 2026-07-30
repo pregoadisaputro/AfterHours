@@ -1,8 +1,12 @@
 using AfterHours.Components;
+using AfterHours.Data;
+using AfterHours.Services.Tmdb;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddTmdbClient(builder.Configuration);
 
 var app = builder.Build();
 
