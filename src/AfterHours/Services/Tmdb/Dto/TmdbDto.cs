@@ -1,13 +1,23 @@
+using System.Text.Json.Serialization;
+
 namespace AfterHours.Services.Tmdb.Dto;
 
-public record TmdbDetailsResponse(
+public record TmdbMovieDetailsResponse(
     int Id,
     string? Title,
+    string? Overview,
+    int? Runtime,
+    [property: JsonPropertyName("release_date")] DateOnly? ReleaseDate,
+    string? Poster_Path,
+    string? Backdrop_Path
+);
+
+public record TmdbTvDetailsResponse(
+    int Id,
     string? Name,
     string? Overview,
     int? Runtime,
-    string? Release_Date,
-    string? First_Air_Date,
+    [property: JsonPropertyName("first_air_date")] DateOnly? FirstAirDate,
     string? Poster_Path,
     string? Backdrop_Path
 );
@@ -25,8 +35,8 @@ public record TmdbSearchResults(
     string? Name,
     string? Media_Type,
     string? Overview,
-    string? Release_Date,
-    string? First_Air_Date,
+    [property: JsonPropertyName("release_date")] DateOnly? ReleaseDate,
+    [property: JsonPropertyName("first_air_date")] DateOnly? FirstAirDate,
     string? Poster_Path,
     string? Backdrop_Path
 );
