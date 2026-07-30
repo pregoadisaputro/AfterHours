@@ -13,7 +13,7 @@ public static class TmdbExtension
             configuration["Tmdb:ApiKey"]
             ?? throw new InvalidOperationException("TMDB key is not configured.");
 
-        services.AddHttpClient<TmdbServices>(client =>
+        services.AddHttpClient<TmdbService>(client =>
         {
             client.BaseAddress = new Uri("https://api.themoviedb.org/3/");
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
