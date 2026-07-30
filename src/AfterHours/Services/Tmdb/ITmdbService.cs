@@ -5,11 +5,10 @@ namespace AfterHours.Services.Tmdb;
 
 public interface ITmdbService
 {
-    Task<TmdbDetailsResponse?> GetDetailsAsync(
-        MediaType mediaType,
-        int id,
-        CancellationToken ct = default
-    );
+    Task<TmdbMovieDetailsResponse?> GetMovieDetailsAsync(int id, CancellationToken ct = default);
+
+    Task<TmdbTvDetailsResponse?> GetTvDetailsAsync(int id, CancellationToken ct = default);
+
     Task<TmdbSearchResponse?> SearchAsync(
         MediaType mediaType,
         string query,
