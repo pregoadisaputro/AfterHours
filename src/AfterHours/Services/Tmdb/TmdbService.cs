@@ -52,6 +52,18 @@ public sealed class TmdbService(HttpClient client) : ITmdbService
 
         response.EnsureSuccessStatusCode();
 
-        return await response.Content.ReadFromJsonAsync<TmdbSearchResponse>(ct);
+        var result = await response.Content.ReadFromJsonAsync<TmdbSearchResponse>(ct);
+
+        if (result is null)
+        {
+            return null;
+        }
+
+        return new TmdbSearchResponse(
+            result.Page,
+            result.Total_Pages,
+            result.TotalResutls,
+            result.Results.Where(x => x.Media_Type == "movie" || x.Media_Type == "tv").ToList()
+        );
     }
 }
