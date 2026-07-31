@@ -4,8 +4,8 @@
 @using AfterHours.Services.Tmdb
 @inject ITmdbService Tmdb
 
-<input @bind="query" @bind:event="oninput" @onkeyup="HandleKeyUp" placeholder="search movie or show" />
-<button @onclick="SearchAsync">search</button>
+<input @bind="query" @bind:event="oninput" @onkeyup="HandleKeyUp" @onkeyup="HandleKeyUp"
+       placeholder="search movie or show" />
 
 @if (isSearching)
 {
