@@ -10,9 +10,8 @@ public interface ITmdbService
     Task<TmdbTvDetailsResponse?> GetTvDetailsAsync(int id, CancellationToken ct = default);
 
     Task<TmdbSearchResponse?> SearchAsync(
-        MediaType mediaType,
         string query,
-        int page,
+        int page = 1,
         CancellationToken ct = default
     );
 }

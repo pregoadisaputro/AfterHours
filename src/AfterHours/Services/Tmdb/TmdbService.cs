@@ -1,5 +1,4 @@
 using System.Net;
-using AfterHours.Data.Enum;
 using AfterHours.Services.Tmdb.Dto;
 
 namespace AfterHours.Services.Tmdb;
@@ -41,18 +40,13 @@ public sealed class TmdbService(HttpClient client) : ITmdbService
     }
 
     public async Task<TmdbSearchResponse?> SearchAsync(
-        MediaType mediaType,
         string query,
-        int page,
+        int page = 1,
         CancellationToken ct = default
     )
     {
-        ArgumentOutOfRangeException.ThrowIfLessThan(page, 1);
-
-        var type = mediaType.ToString().ToLowerInvariant();
-
         var response = await client.GetAsync(
-            $"search/{type}?query={Uri.EscapeDataString(query)}&page={page}",
+            $"search/multi?query={Uri.EscapeDataString(query)}&page={page}",
             ct
         );
 
