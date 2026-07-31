@@ -10,6 +10,16 @@ namespace AfterHours.Features.Media.Services;
 public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, ITmdbService tmdb)
     : IMediaService
 {
+    private static DateOnly? ParseDate(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        return DateOnly.TryParseExact(value, "yyyy-MM-dd", out var result) ? result : null;
+    }
+
     public async Task<GetDetailsResponse?> GetDetailsAsync(
         MediaType mediaType,
         int externalId,
@@ -37,7 +47,7 @@ public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, 
                 movie.Overview,
                 movie.Poster_Path,
                 movie.Backdrop_Path,
-                movie.ReleaseDate,
+                ParseDate(movie.Release_Date),
                 movie.Runtime,
                 MediaType.Movie,
                 media?.MediaStatus,
@@ -60,7 +70,7 @@ public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, 
             tv.Overview,
             tv.Poster_Path,
             tv.Backdrop_Path,
-            tv.FirstAirDate,
+            ParseDate(tv.First_Air_Date),
             tv.Runtime,
             MediaType.Tv,
             media?.MediaStatus,
