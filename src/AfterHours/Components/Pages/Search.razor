@@ -1,0 +1,77 @@
+@page "/search"
+
+@using AfterHours.Services.Tmdb.Dto
+@using AfterHours.Services.Tmdb
+@inject ITmdbService Tmdb
+
+<input @bind="query" @bind:event="oninput" @onkeyup="HandleKeyUp" placeholder="search movie or show" />
+<button @onclick="SearchAsync">search</button>
+
+@if (isSearching)
+{
+    <p>searching...</p>
+}
+
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <p>@errorMessage</p>
+}
+
+@if (results is not null && results.Results.Count == 0)
+{
+    <p>not found.</p>
+}
+
+@if (results is not null && results.Results.Count > 0)
+{
+    <div>
+        @foreach (var item in results.Results)
+        {
+            @if (!string.IsNullOrWhiteSpace(item.Poster_Path))
+            {
+                <img src="@($"https://image.tmdb.org/t/p/w342{item.Poster_Path}")" alt="@(item.Title ?? item.Name)" />
+            }
+
+            <p>@(item.Title ?? item.Name)</p>
+        }
+    </div>
+}
+
+@code {
+    private string query = string.Empty;
+    private bool isSearching;
+    private TmdbSearchResponse? results;
+    private string? errorMessage;
+
+    private async Task SearchAsync()
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return;
+        }
+
+        isSearching = true;
+
+        try
+        {
+            results = await Tmdb.SearchAsync(query);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+            results = null;
+        }
+        finally
+        {
+            isSearching = false;
+        }
+    }
+
+    private async Task HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await SearchAsync();
+        }
+    }
+}
