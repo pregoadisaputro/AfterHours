@@ -7,7 +7,7 @@ public record TmdbMovieDetailsResponse(
     string? Title,
     string? Overview,
     int? Runtime,
-    [property: JsonPropertyName("release_date")] DateOnly? ReleaseDate,
+    string? Release_Date,
     string? Poster_Path,
     string? Backdrop_Path
 );
@@ -17,7 +17,7 @@ public record TmdbTvDetailsResponse(
     string? Name,
     string? Overview,
     int? Runtime,
-    [property: JsonPropertyName("first_air_date")] DateOnly? FirstAirDate,
+    string? First_Air_Date,
     string? Poster_Path,
     string? Backdrop_Path
 );
@@ -35,8 +35,8 @@ public record TmdbSearchResults(
     string? Name,
     string? Media_Type,
     string? Overview,
-    [property: JsonPropertyName("release_date")] DateOnly? ReleaseDate,
-    [property: JsonPropertyName("first_air_date")] DateOnly? FirstAirDate,
+    string? Release_Date,
+    string? First_Air_Date,
     string? Poster_Path,
     string? Backdrop_Path
 );
