@@ -1,4 +1,3 @@
-using AfterHours.Data.Enum;
 using AfterHours.Services.Tmdb.Dto;
 
 namespace AfterHours.Services.Tmdb;

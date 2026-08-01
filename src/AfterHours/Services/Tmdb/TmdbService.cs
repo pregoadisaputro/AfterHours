@@ -62,7 +62,7 @@ public sealed class TmdbService(HttpClient client) : ITmdbService
         return new TmdbSearchResponse(
             result.Page,
             result.Total_Pages,
-            result.TotalResutls,
+            result.TotalResults,
             result.Results.Where(x => x.Media_Type == "movie" || x.Media_Type == "tv").ToList()
         );
     }
