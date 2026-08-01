@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace AfterHours.Services.Tmdb.Dto;
 
 public record TmdbMovieDetailsResponse(
@@ -25,7 +23,7 @@ public record TmdbTvDetailsResponse(
 public record TmdbSearchResponse(
     int Page,
     int Total_Pages,
-    int TotalResutls,
+    int TotalResults,
     IReadOnlyList<TmdbSearchResults> Results
 );
 
