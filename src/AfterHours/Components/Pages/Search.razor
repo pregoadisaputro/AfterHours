@@ -1,77 +1,115 @@
 @page "/search"
 
-@using AfterHours.Services.Tmdb.Dto
+@implements IDisposable
+
+@using AfterHours.Components.Shared
 @using AfterHours.Services.Tmdb
+@using AfterHours.Services.Tmdb.Dto
+
 @inject ITmdbService Tmdb
 
-<input @bind="query" @bind:event="oninput" @onkeyup="HandleKeyUp" @onkeyup="HandleKeyUp"
-       placeholder="search movie or show" />
+<div class="m-5 flex flex-col items-center justify-center gap-7">
+    <input class="font-medium outline-none focus:ring-2 focus:ring-white mt-2 bg-[#121212] hover:bg-[#212121] border border-transparent hover:border-[#616161] transition-all duration-300 ease-in-out w-1/2 h-11 rounded-full px-6 py-2.5" @bind="query"
+           @bind:event="oninput" @bind:after="OnQueryChanged" placeholder="Search movie or show" />
 
-@if (isSearching)
-{
-    <p>searching...</p>
-}
+    @if (isSearching)
+    {
+        <p>Searching...</p>
+    }
 
-@if (!string.IsNullOrWhiteSpace(errorMessage))
-{
-    <p>@errorMessage</p>
-}
+    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    {
+        <p>@errorMessage</p>
+    }
 
-@if (results is not null && results.Results.Count == 0)
-{
-    <p>not found.</p>
-}
+    @if (results is not null && results.Results.Count == 0)
+    {
+        <p>Not found.</p>
+    }
 
-@if (results is not null && results.Results.Count > 0)
-{
-    <div>
-        @foreach (var item in results.Results)
-        {
-            @if (!string.IsNullOrWhiteSpace(item.Poster_Path))
+    @if (results is not null && results.Results.Count > 0)
+    {
+        <div class="grid grid-cols-5 gap-2.5">
+            @foreach (var item in results.Results)
             {
-                <img src="@($"https://image.tmdb.org/t/p/w342{item.Poster_Path}")" alt="@(item.Title ?? item.Name)" />
+                <MediaCard Title="@(item.Title ?? item.Name)" ImageUrl="@item.Poster_Path"
+                           ReleaseDate="@(item.Release_Date ?? item.First_Air_Date)" />
             }
-
-            <p>@(item.Title ?? item.Name)</p>
-        }
-    </div>
-}
+        </div>
+    }
+</div>
 
 @code {
     private string query = string.Empty;
     private bool isSearching;
-    private TmdbSearchResponse? results;
     private string? errorMessage;
+    private TmdbSearchResponse? results;
+    private CancellationTokenSource? debounce;
 
-    private async Task SearchAsync()
+    private async Task OnQueryChanged()
     {
-        if (string.IsNullOrWhiteSpace(query))
+        debounce?.Cancel();
+        debounce?.Dispose();
+
+        debounce = new CancellationTokenSource();
+
+        try
         {
+            await Task.Delay(300, debounce.Token);
+            await SearchAsync(debounce.Token);
+        }
+        catch (TaskCanceledException)
+        {
+        }
+    }
+
+    private async Task SearchAsync(CancellationToken ct)
+    {
+        var currentQuery = query.Trim();
+
+        if (string.IsNullOrWhiteSpace(currentQuery))
+        {
+            results = null;
+            errorMessage = null;
             return;
         }
 
         isSearching = true;
+        errorMessage = null;
 
         try
         {
-            results = await Tmdb.SearchAsync(query);
+            var response = await Tmdb.SearchAsync(currentQuery, ct: ct);
+
+            if (currentQuery == query.Trim())
+            {
+                results = response;
+            }
         }
+
+    catch (OperationCanceledException){
+
+    }
+
         catch (Exception ex)
         {
-            errorMessage = ex.Message;
-            results = null;
+            if (currentQuery == query.Trim())
+            {
+                errorMessage = ex.Message;
+                results = null;
+            }
         }
         finally
-        {
-            isSearching = false;
+        {   
+            if(!ct.IsCancellationRequested){
+                isSearching = false;
+
+            }
         }
     }
 
-    private async Task HandleKeyUp(KeyboardEventArgs e)
-    {
-        if (e.Key == "Enter")
-        {
-            await SearchAsync();
-        }
+    public void Dispose(){
+        debounce?.Cancel();
+        debounce?.Dispose();
     }
 }
