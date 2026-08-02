@@ -2,12 +2,12 @@
 
 ## what is it?
 
-AfterHours is my personal media tracker, but as a website from my, <br>
+AfterHours is my personal media tracker, but as a website (blazor) from my, <br>
 [MediaArchive.Console](https://github.com/pregoadisaputro/MediaArchive.Console)
 for only Movie and TV.
 
 im making this to actually practice backend stuff properly, EF Core,
-vertical-slice architecture, and consuming a real external API (TMDB)
+vertical-slice architecture, and consuming a API (TMDB)
 instead of just reading/writing JSON like my last project lol.
 
 ## what you can do?
@@ -48,7 +48,7 @@ instead of just reading/writing JSON like my last project lol.
   ```
   npm install
   ```
-- get a free TMDB API Read Access Token (v4 auth):
+- get a free TMDB API read access Token (v4 auth):
   https://www.themoviedb.org/settings/api
 - set it as a user secret:
   ```
