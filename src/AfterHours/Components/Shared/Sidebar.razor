@@ -3,11 +3,17 @@
 
     <div class="flex flex-col items-center gap-4">
 
-        <div class="mb-6 flex text-4xl items-center justify-center rounded-full text-white">
-            ✪
-        </div>
+        <NavLink href="/" Match="NavLinkMatch.All" title="Home"
+                 class="flex h-11 w-11 items-center justify-center rounded-full text-neutral-400 transition duration-300 ease-in-out hover:bg-[#212121] hover:text-white"
+                 ActiveClass="bg-white! text-black! hover:bg-white! hover:text-black!">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
+                <path d="M3 12l9-9 9 9" />
+                <path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10" />
+            </svg>
+        </NavLink>
 
-        <NavLink href="library" Match="NavLinkMatch.All" title="Library"
+        <NavLink href="library" title="Library"
                  class="flex h-11 w-11 items-center justify-center rounded-full text-neutral-400 transition duration-300 ease-in-out hover:bg-[#212121] hover:text-white"
                  ActiveClass="bg-white! text-black! hover:bg-white! hover:text-black!">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
