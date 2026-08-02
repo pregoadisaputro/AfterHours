@@ -1,6 +1,14 @@
 ﻿@inherits LayoutComponentBase
 
-@Body
+@using AfterHours.Components.Shared
+
+<div class="flex min-h-screen bg-black text-white">
+    <Sidebar />
+
+    <main class="min-w-0 flex-1 overflow-x-hidden">
+        @Body
+    </main>
+</div>
 
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
