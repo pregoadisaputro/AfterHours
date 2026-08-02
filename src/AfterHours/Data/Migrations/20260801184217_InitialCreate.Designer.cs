@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AfterHours.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260730230621_InitialCreate")]
+    [Migration("20260801184217_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
