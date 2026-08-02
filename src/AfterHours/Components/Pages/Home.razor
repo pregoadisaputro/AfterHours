@@ -18,18 +18,20 @@
     <div class="flex flex-wrap items-start justify-center gap-8">
 
         <div class="inline-flex gap-2 rounded-full bg-[#121212] p-1">
-            <button
-                class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out @(mediaType is null ? "bg-white text-black" : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
-                @onclick="() => SetMediaType(null)">
+            <button class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out 
+                @(mediaType is null ? "bg-white text-black" : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
+                    @onclick="() => SetMediaType(null)">
                 all
             </button>
             <button
-                class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out @(mediaType == MediaType.Movie ? "bg-white text-black" : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
+                class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out 
+                @(mediaType == MediaType.Movie ? "bg-white text-black" : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
                 @onclick="() => SetMediaType(MediaType.Movie)">
                 movie
             </button>
             <button
-                class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out @(mediaType == MediaType.Tv ? "bg-white text-black" : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
+                class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out 
+                @(mediaType == MediaType.Tv ? "bg-white text-black" : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
                 @onclick="() => SetMediaType(MediaType.Tv)">
                 tv
             </button>
@@ -48,7 +50,7 @@
         </div>
         <select
             class="text-center transition focus:border-white focus:ring-2 focus:ring-white appearance-none cursor-pointer rounded-full bg-[#121212] hover:bg-[#212121] border border-transparent px-4 py-3.5 text-sm font-medium outline-none"
-            @bind="SortByValue" @bind:after="OnFiltersChanged">
+            @bind="SortBy" @bind:after="OnFiltersChanged">
             <option value="@MediaSortBy.RecentlyAdded">recently added</option>
             <option value="@MediaSortBy.RecentlyUpdated">recently updated</option>
             <option value="@MediaSortBy.Id">id</option>
@@ -129,12 +131,6 @@
 
     private bool Goback => currentPage > 1;
     private bool GoNext => response is not null && currentPage < response.TotalPages;
-
-    private MediaSortBy SortByValue
-    {
-        get => SortBy;
-        set => SortBy = value;
-    }
 
     protected override async Task OnInitializedAsync()
     {
