@@ -1,0 +1,73 @@
+<div>
+    @if (confirm)
+    {
+        <div class="inline-flex items-center gap-2">
+            <span class="text-sm text-neutral-400">
+                delete this?
+            </span>
+
+            <button class="
+                cursor-pointer
+                rounded-full
+                bg-red-600
+                px-4
+                py-2
+                font-medium
+                text-white
+                transition
+                duration-300
+                hover:bg-red-500" @onclick="Confirm">
+                delete
+            </button>
+
+            <button class="
+                cursor-pointer
+                rounded-full
+                bg-[#121212]
+                px-4
+                py-2
+                font-medium
+                text-neutral-400
+                transition
+                duration-300
+                hover:bg-[#212121] hover:text-white" @onclick="Cancel">
+                cancel
+            </button>
+        </div>
+    }
+    else
+    {
+        <button class="
+            cursor-pointer
+            rounded-full
+            bg-[#121212]
+            px-4
+            py-2
+            font-medium
+            text-neutral-400
+            transition
+            duration-300
+            hover:bg-red-600 hover:text-white" @onclick="() => confirm = true">
+            delete
+        </button>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnDelete { get; set; }
+    private bool confirm;
+
+    private async Task Confirm()
+    {
+        confirm = false;
+
+        await OnDelete.InvokeAsync();
+    }
+
+    private void Cancel()
+    {
+        confirm = false;
+    }
+
+}
