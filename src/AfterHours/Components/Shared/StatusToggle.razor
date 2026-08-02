@@ -1,0 +1,39 @@
+@using AfterHours.Data.Enum
+
+<div class="inline-flex gap-2 rounded-full bg-[#121212] p-1">
+
+    @foreach (var option in StatusOptions)
+    {
+        <button class="
+            cursor-pointer
+            rounded-full
+            px-4
+            py-2
+            font-medium
+            transition
+            duration-300
+            ease-in-out
+            @(CurrentStatus == option
+                    ? "bg-white text-black"
+                    : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
+                @onclick="() => StatusSelected.InvokeAsync(option)">
+            @option.ToString().ToLower()
+        </button>
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public MediaStatus? CurrentStatus { get; set; }
+
+    [Parameter]
+    public EventCallback<MediaStatus> StatusSelected { get; set; }
+
+    private static readonly MediaStatus[] StatusOptions =
+    [
+        MediaStatus.Planned,
+        MediaStatus.Completed,
+        MediaStatus.Dropped
+    ];
+}
