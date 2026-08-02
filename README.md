@@ -25,7 +25,7 @@ instead of just reading/writing JSON like my last project lol.
 - search your library by title
 - filter by type (movie/tv), status (planned/completed/dropped), or rating
 - sort by recently added, recently updated, or id
-- click into a title to see full details
+- click the image to see full details
 
 ### search
 
