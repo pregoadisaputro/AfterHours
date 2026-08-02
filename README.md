@@ -1,10 +1,15 @@
 # AfterHours
 
+<p float="left">
+  <img src="screenshots/library.jpg" width="48%" />
+  <img src="screenshots/search_add.jpg" width="48%" />
+</p>
+
 ## what is it?
 
-AfterHours is my personal media tracker, but as a website (blazor) from my, <br>
-[MediaArchive.Console](https://github.com/pregoadisaputro/MediaArchive.Console)
-for only Movie and TV.
+AfterHours is my personal media tracker, but as a website (Blazor) — a
+follow-up to my [MediaArchive.Console](https://github.com/pregoadisaputro/MediaArchive.Console)
+project, now just for Movies and TV.
 
 im making this to actually practice backend stuff properly, EF Core,
 vertical-slice architecture, and consuming a API (TMDB)
