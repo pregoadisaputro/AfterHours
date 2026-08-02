@@ -78,6 +78,73 @@ public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, 
         );
     }
 
+    public async Task<GetMediasPage> GetMediasAsync(
+        GetMediasRequest request,
+        CancellationToken ct = default
+    )
+    {
+        var pageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
+        var pageSize = request.PageSize switch
+        {
+            < 1 => 10,
+            > 10 => 10,
+            _ => request.PageSize,
+        };
+
+        var query = db.MediaItems.AsNoTracking().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(request.Title))
+        {
+            query = query.Where(x => EF.Functions.Like(x.Title, $"%{request.Title}%"));
+        }
+
+        if (request.Rating.HasValue)
+        {
+            query = query.Where(x => x.Rating == request.Rating);
+        }
+
+        if (request.MediaType.HasValue)
+        {
+            query = query.Where(x => x.MediaType == request.MediaType);
+        }
+
+        if (request.MediaStatus.HasValue)
+        {
+            query = query.Where(x => x.MediaStatus == request.MediaStatus);
+        }
+
+        query = request.SortBy switch
+        {
+            MediaSortBy.RecentlyUpdated => query
+                .OrderByDescending(m => m.UpdatedAt)
+                .ThenBy(m => m.Id),
+            MediaSortBy.Id => query.OrderBy(m => m.Id),
+            _ => query.OrderByDescending(m => m.CreatedAt).ThenBy(m => m.Id),
+        };
+
+        var totalItems = await query.CountAsync(ct);
+        var skip = (pageNumber - 1) * pageSize;
+        var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+        var response = await query
+            .Skip(skip)
+            .Take(pageSize)
+            .Select(m => new GetMediasResponse(
+                m.Id,
+                m.ExternalId,
+                m.Rating,
+                m.Title,
+                m.PosterPath,
+                m.BackdropPath,
+                m.ReleaseDate,
+                m.MediaType,
+                m.MediaStatus
+            ))
+            .ToListAsync(ct);
+
+        return new GetMediasPage(pageNumber, pageSize, totalItems, totalPages, response);
+    }
+
     public async Task CreateAsync(CreateMediaRequest request, CancellationToken ct = default)
     {
         var existingMedia = await db

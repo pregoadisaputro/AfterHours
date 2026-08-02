@@ -10,9 +10,8 @@ public interface IMediaService
         int externalId,
         CancellationToken ct = default
     );
-
+    Task<GetMediasPage> GetMediasAsync(GetMediasRequest request, CancellationToken ct = default);
     Task CreateAsync(CreateMediaRequest request, CancellationToken ct = default);
     Task UpdateAsync(int id, UpdateMediaRequest request, CancellationToken ct = default);
-
     Task DeleteAsync(int id, CancellationToken ct = default);
 }
