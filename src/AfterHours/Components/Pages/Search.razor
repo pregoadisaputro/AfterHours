@@ -5,16 +5,19 @@
 @using AfterHours.Components.Shared
 @using AfterHours.Services.Tmdb
 @using AfterHours.Services.Tmdb.Dto
+@using AfterHours.Data.Enum
 
+@inject NavigationManager Nav
 @inject ITmdbService Tmdb
 
 <div class="m-5 flex flex-col items-center justify-center gap-7">
-    <input class="font-medium outline-none focus:ring-2 focus:ring-white mt-2 bg-[#121212] hover:bg-[#212121] border border-transparent hover:border-[#616161] transition-all duration-300 ease-in-out w-1/2 h-11 rounded-full px-6 py-2.5" @bind="query"
-           @bind:event="oninput" @bind:after="OnQueryChanged" placeholder="Search movie or show" />
+    <input
+    class="font-medium outline-none focus:ring-2 focus:ring-white mt-2 bg-[#121212] hover:bg-[#212121] border border-transparent hover:border-[#616161] transition-all duration-300 ease-in-out w-1/2 h-11 rounded-full px-6 py-2.5"
+    @bind="query" @bind:event="oninput" @bind:after="OnQueryChanged" placeholder="search movie or show" />
 
     @if (isSearching)
     {
-        <p>Searching...</p>
+        <p>searching...</p>
     }
 
     @if (!string.IsNullOrWhiteSpace(errorMessage))
@@ -29,11 +32,13 @@
 
     @if (results is not null && results.Results.Count > 0)
     {
-        <div class="grid grid-cols-5 gap-2.5">
+        <div class="grid grid-cols-5 gap-1">
             @foreach (var item in results.Results)
             {
-                <MediaCard Title="@(item.Title ?? item.Name)" ImageUrl="@item.Poster_Path"
-                           ReleaseDate="@(item.Release_Date ?? item.First_Air_Date)" />
+                <div @onclick="() => OpenMedia(item)">
+                    <MediaCard Title="@(item.Title ?? item.Name)" ImageUrl="@item.Poster_Path"
+                               ReleaseDate="@(item.Release_Date ?? item.First_Air_Date)" />
+                </div>
             }
         </div>
     }
@@ -87,9 +92,10 @@
             }
         }
 
-    catch (OperationCanceledException){
+        catch (OperationCanceledException)
+        {
 
-    }
+        }
 
         catch (Exception ex)
         {
@@ -100,16 +106,32 @@
             }
         }
         finally
-        {   
-            if(!ct.IsCancellationRequested){
+        {
+            if (!ct.IsCancellationRequested)
+            {
                 isSearching = false;
 
             }
         }
     }
 
-    public void Dispose(){
+    public void Dispose()
+    {
         debounce?.Cancel();
         debounce?.Dispose();
+    }
+
+    private void OpenMedia(TmdbSearchResults item)
+    {
+
+        var type = item.Media_Type switch
+        {
+            "movie" => MediaType.Movie,
+            "tv" => MediaType.Tv,
+            _ => MediaType.Movie
+        };
+
+        Nav.NavigateTo($"/media/{type}/{item.Id}");
+
     }
 }
