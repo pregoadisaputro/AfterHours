@@ -28,7 +28,15 @@ else
 
                 <RatingSelector SelectedRating="selectedRating" RatingSelected="SetRating" />
 
-                <StatusToggle CurrentStatus="@details.MediaStatus" StatusSelected="SaveStatus" />
+                <div class="flex items-center justify-between">
+
+                    <StatusToggle CurrentStatus="@details.MediaStatus" StatusSelected="SaveStatus" />
+
+                    @if (details.IsSaved)
+                    {
+                        <DeleteButton OnDelete="Delete" />
+                    }
+                </div>
 
             </div>
         </div>
@@ -115,6 +123,18 @@ else
         }
 
         await ReloadDetails();
+    }
+
+    private async Task Delete()
+    {
+        if (details?.Id is null)
+        {
+            return;
+        }
+
+        await MediaService.DeleteAsync(details.Id.Value);
+
+        Nav.NavigateTo("/library");
     }
 
     private static MediaType ParseMediaType(string type)
