@@ -1,25 +1,11 @@
 # AfterHours
 
-<p>
-  <img src="screenshots/library.jpg" width="500" />
+<p align="center">
+  <img src="screenshots/library.jpg" width="400" />
 </p>
-<p>
-  <img src="screenshots/search_add.jpg" width="500" />
+<p align="center">
+  <img src="screenshots/search_add.jpg" width="400" />
 </p>
-
-align="center" also keeps them from looking left-jammed against the README edge. Adjust 700 to taste — most portfolio READMEs sit around 600–800px for a screenshot.
-
-2. Actually resize the source files too
-
-Capping display width with HTML doesn't shrink the actual file — someone's still downloading a 4K PNG that just displays smaller. Worth resizing for real, same as the earlier compression step:
-
-bash
-magick library.png -resize 900x -strip screenshots/library.jpg
-magick search_add.png -resize 900x -strip screenshots/search_add.jpg
-
-Resize to somewhat more than your display width (900px source vs 700px display) so it still looks sharp on high-DPI screens, but isn't multiple MB.
-
-Want me to update the README with the capped-width version now?
 
 ## what is it?
 
