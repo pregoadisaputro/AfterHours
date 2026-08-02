@@ -1,0 +1,25 @@
+<div class="relative">
+
+    <img class="h-96 w-full object-cover" src="@($"https://image.tmdb.org/t/p/original{BackdropPath}")" alt="@Title" />
+
+    <div class="absolute inset-0 bg-linear-to-t from-[#121212] via-transparent to-transparent"></div>
+
+    <button
+        class="cursor-pointer absolute left-6 top-6 flex h-10 w-10 items-center justify-center rounded-full bg-[#121212] text-xl text-white backdrop-blur-sm transition hover:bg-[#212121]"
+        @onclick="OnBack">
+        ◀
+    </button>
+
+</div>
+
+@code {
+
+    [Parameter]
+    public string? BackdropPath { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public EventCallback OnBack { get; set; }
+}
