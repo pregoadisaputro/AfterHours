@@ -1,10 +1,10 @@
 # AfterHours
 
-<p align="center">
-  <img src="screenshots/library.jpg" width="300" />
+<p>
+  <img src="screenshots/library.jpg" width="500" />
 </p>
-<p align="center">
-  <img src="screenshots/search_add.jpg" width="300" />
+<p>
+  <img src="screenshots/search_add.jpg" width="500" />
 </p>
 
 align="center" also keeps them from looking left-jammed against the README edge. Adjust 700 to taste — most portfolio READMEs sit around 600–800px for a screenshot.
