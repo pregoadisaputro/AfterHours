@@ -5,27 +5,11 @@
         <img class="w-full border-2 border-[#212121] aspect-2/3 object-cover rounded-[14px]"
              src="@($"https://image.tmdb.org/t/p/w500{ImageUrl}")" alt="@Title">
     }
-
-    <div class="flex flex-col flex-1 mt-2 gap-2">
-        @if (!String.IsNullOrEmpty(Title))
-        {
-            <p class="font-bold line-clamp-2">@Title</p>
-        }
-
-        @if (!string.IsNullOrEmpty(ReleaseDate))
-        {
-            <p class="text-xs text-neutral-400 mt-auto">@ReleaseDate</p>
-        }
-    </div>
-
 </div>
-
 
 @code {
     [Parameter]
     public string? Title { get; set; }
     [Parameter]
     public string? ImageUrl { get; set; }
-    [Parameter]
-    public string? ReleaseDate { get; set; }
 }

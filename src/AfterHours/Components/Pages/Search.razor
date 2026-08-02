@@ -36,8 +36,7 @@
             @foreach (var item in results.Results)
             {
                 <div @onclick="() => OpenMedia(item)">
-                    <MediaCard Title="@(item.Title ?? item.Name)" ImageUrl="@item.Poster_Path"
-                               ReleaseDate="@(item.Release_Date ?? item.First_Air_Date)" />
+                    <MediaCard Title="@(item.Title ?? item.Name)" ImageUrl="@item.Poster_Path" />
                 </div>
             }
         </div>
