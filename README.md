@@ -1,9 +1,7 @@
 # AfterHours
 
-<p float="left">
-  <img src="screenshots/library.jpg" width="48%" />
-  <img src="screenshots/search_add.jpg" width="48%" />
-</p>
+![library](screenshots/library.jpg)
+![search](screenshots/search_add.jpg)
 
 ## what is it?
 
