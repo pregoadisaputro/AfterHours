@@ -10,7 +10,7 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddTmdbClient(builder.Configuration);
 
-builder.Services.AddScoped<IMediaService, MediaService>();
+builder.Services.AddScoped<MediaService>();
 
 var app = builder.Build();
 

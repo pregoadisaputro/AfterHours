@@ -3,7 +3,7 @@ using AfterHours.Services.Tmdb.Dto;
 
 namespace AfterHours.Services.Tmdb;
 
-public sealed class TmdbService(HttpClient client) : ITmdbService
+public sealed class TmdbService(HttpClient client)
 {
     public async Task<TmdbMovieDetailsResponse?> GetMovieDetailsAsync(
         int id,

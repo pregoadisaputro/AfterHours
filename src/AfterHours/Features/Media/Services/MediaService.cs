@@ -7,8 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AfterHours.Features.Media.Services;
 
-public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, ITmdbService tmdb)
-    : IMediaService
+public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, TmdbService tmdb)
 {
     private static DateOnly? ParseDate(string? value)
     {
@@ -198,7 +197,7 @@ public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, 
         logger.LogInformation("Updated media with ID {MediaId}", id);
     }
 
-    public async Task DeleteAsync(int id, CancellationToken ct)
+    public async Task DeleteAsync(int id, CancellationToken ct = default)
     {
         var deletedMedia = await db.MediaItems.FindAsync([id], ct);
 
