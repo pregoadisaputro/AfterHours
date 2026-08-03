@@ -25,21 +25,29 @@
         <p>@errorMessage</p>
     }
 
-    @if (results is not null && results.Results.Count == 0)
+    @if (results is not null)
     {
-        <p>Not found.</p>
-    }
-
-    @if (results is not null && results.Results.Count > 0)
-    {
-        <div class="grid grid-cols-5 gap-1">
-            @foreach (var item in results.Results)
-            {
-                <div @onclick="() => HandleOpenMedia(item)">
-                    <MediaCard Title="@(item.Title ?? item.Name)" ImageUrl="@item.Poster_Path" />
-                </div>
-            }
-        </div>
+        @if (results.Results.Count == 0)
+        {
+            <div class="py-16 text-center">
+                <p class="text-lg font-medium">no results found.</p>
+                <p class="mt-2 text-sm text-neutral-500">
+                    no movies or tv shows matched
+                    "<span class="text-white">@query</span>".
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="grid grid-cols-5 gap-1">
+                @foreach (var item in results.Results)
+                {
+                    <button class="border-0 bg-transparent p-0 text-left" @onclick="() => HandleOpenMedia(item)">
+                        <MediaCard Title="@(item.Title ?? item.Name)" ImageUrl="@item.Poster_Path" />
+                    </button>
+                }
+            </div>
+        }
     }
 </div>
 
