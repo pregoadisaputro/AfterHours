@@ -15,7 +15,7 @@
     class="font-medium outline-none focus:ring-2 focus:ring-white mt-2 bg-[#121212] hover:bg-[#212121] border border-transparent hover:border-[#616161] transition-all duration-300 ease-in-out w-1/2 h-11 rounded-full px-6 py-2.5"
     @bind="query" @bind:event="oninput" @bind:after="HandleQueryChanged" placeholder="search movie or show" />
 
-    <div class="flex flex-wrap items-start justify-center gap-8">
+    <div class="flex flex-wrap items-start justify-center gap-4">
 
         <div class="inline-flex gap-2 rounded-full bg-[#121212] p-1">
             <button class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out 
@@ -48,21 +48,21 @@
                 </button>
             }
         </div>
-    </div>
 
-    <div class="inline-flex gap-2 rounded-full bg-[#121212] p-1">
-        <button
-            class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out 
-            @(sortBy == MediaSortBy.RecentlyAdded ? "bg-white text-black" : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
-            @onclick="() => SetSortBy(MediaSortBy.RecentlyAdded)">
-            recently added
-        </button>
-        <button
-            class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out 
-            @(sortBy == MediaSortBy.RecentlyUpdated ? "bg-white text-black" : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
-            @onclick="() => SetSortBy(MediaSortBy.RecentlyUpdated)">
-            recently updated
-        </button>
+        <div class="inline-flex gap-2 rounded-full bg-[#121212] p-1">
+            <button
+                class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out 
+                @(sortBy == MediaSortBy.RecentlyAdded ? "bg-white text-black" : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
+                @onclick="() => SetSortBy(MediaSortBy.RecentlyAdded)">
+                recently added
+            </button>
+            <button
+                class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out 
+                @(sortBy == MediaSortBy.RecentlyUpdated ? "bg-white text-black" : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
+                @onclick="() => SetSortBy(MediaSortBy.RecentlyUpdated)">
+                recently updated
+            </button>
+        </div>
     </div>
 
     <div class="flex flex-col items-center gap-2">
