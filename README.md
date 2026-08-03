@@ -6,6 +6,9 @@
 <p align="center">
   <img src="screenshots/search_add.jpg" width="400" />
 </p>
+<p align="center">
+  <img src="screenshots/details.jpg" width="400" />
+</p>
 
 ## what is it?
 
