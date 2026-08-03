@@ -85,8 +85,8 @@ public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, 
         var pageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
         var pageSize = request.PageSize switch
         {
-            < 1 => 10,
-            > 10 => 10,
+            < 1 => 24,
+            > 100 => 100,
             _ => request.PageSize,
         };
 

@@ -10,7 +10,7 @@ public enum MediaSortBy
 
 public record GetMediasRequest(
     int PageNumber = 1,
-    int PageSize = 10,
+    int PageSize = 24,
     string? Title = null,
     decimal? Rating = null,
     MediaType? MediaType = null,
