@@ -61,9 +61,9 @@ public sealed class TmdbService(HttpClient client)
 
         return new TmdbSearchResponse(
             result.Page,
-            result.Total_Pages,
+            result.TotalPages,
             result.TotalResults,
-            result.Results.Where(x => x.Media_Type == "movie" || x.Media_Type == "tv").ToList()
+            result.Results.Where(x => x.MediaType == "movie" || x.MediaType == "tv").ToList()
         );
     }
 }

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace AfterHours.Services.Tmdb.Dto;
 
 public record TmdbMovieDetailsResponse(
@@ -5,9 +7,9 @@ public record TmdbMovieDetailsResponse(
     string? Title,
     string? Overview,
     int? Runtime,
-    string? Release_Date,
-    string? Poster_Path,
-    string? Backdrop_Path
+    [property: JsonPropertyName("release_date")] string? ReleaseDate,
+    [property: JsonPropertyName("poster_path")] string? PosterPath,
+    [property: JsonPropertyName("backdrop_path")] string? BackdropPath
 );
 
 public record TmdbTvDetailsResponse(
@@ -15,15 +17,15 @@ public record TmdbTvDetailsResponse(
     string? Name,
     string? Overview,
     int? Runtime,
-    string? First_Air_Date,
-    string? Poster_Path,
-    string? Backdrop_Path
+    [property: JsonPropertyName("first_air_date")] string? FirstAirDate,
+    [property: JsonPropertyName("poster_path")] string? PosterPath,
+    [property: JsonPropertyName("backdrop_path")] string? BackdropPath
 );
 
 public record TmdbSearchResponse(
     int Page,
-    int Total_Pages,
-    int TotalResults,
+    [property: JsonPropertyName("total_pages")] int TotalPages,
+    [property: JsonPropertyName("total_results")] int TotalResults,
     IReadOnlyList<TmdbSearchResults> Results
 );
 
@@ -31,10 +33,10 @@ public record TmdbSearchResults(
     int Id,
     string? Title,
     string? Name,
-    string? Media_Type,
+    [property: JsonPropertyName("media_type")] string? MediaType,
     string? Overview,
-    string? Release_Date,
-    string? First_Air_Date,
-    string? Poster_Path,
-    string? Backdrop_Path
+    [property: JsonPropertyName("release_date")] string? ReleaseDate,
+    [property: JsonPropertyName("first_air_date")] string? FirstAirDate,
+    [property: JsonPropertyName("poster_path")] string? PosterPath,
+    [property: JsonPropertyName("backdrop_path")] string? BackdropPath
 );

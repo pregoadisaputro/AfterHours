@@ -43,7 +43,7 @@
                 @foreach (var item in results.Results)
                 {
                     <button class="border-0 bg-transparent p-0 text-left" @onclick="() => HandleOpenMedia(item)">
-                        <MediaCard Title="@(item.Title ?? item.Name)" ImageUrl="@item.Poster_Path" />
+                        <MediaCard Title="@(item.Title ?? item.Name)" ImageUrl="@item.PosterPath" />
                     </button>
                 }
             </div>
@@ -125,7 +125,7 @@
     private void HandleOpenMedia(TmdbSearchResults item)
     {
 
-        var type = item.Media_Type switch
+        var type = item.MediaType switch
         {
             "movie" => MediaType.Movie,
             "tv" => MediaType.Tv,
