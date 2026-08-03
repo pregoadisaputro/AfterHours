@@ -10,7 +10,7 @@
 @inject MediaService MediaService
 @inject NavigationManager Nav
 
-<div class="m-5 flex flex-col items-center justify-center gap-7">
+<div class="m-4 flex flex-col items-center justify-center gap-7">
     <input
     class="font-medium outline-none focus:ring-2 focus:ring-white mt-2 bg-[#121212] hover:bg-[#212121] border border-transparent hover:border-[#616161] transition-all duration-300 ease-in-out w-1/2 h-11 rounded-full px-6 py-2.5"
     @bind="query" @bind:event="oninput" @bind:after="HandleQueryChanged" placeholder="search movie or show" />
@@ -94,12 +94,12 @@
 
     @if (response is not null && response.Data.Count > 0)
     {
-        <div class="grid grid-cols-5">
+        <div class="grid grid-cols-4">
             @foreach (var item in response.Data)
             {
-                <div @onclick="() => OpenMedia(item)">
+                <button class="border-0 bg-transparent p-0 text-left" @onclick="() => OpenMedia(item)">
                     <MediaCard Title="@item.Title" ImageUrl="@item.PosterPath" />
-                </div>
+                </button>
             }
         </div>
 
@@ -126,7 +126,7 @@
 @code {
     private GetMediasPage? response;
     private int currentPage = 1;
-    private int pageSize = 10;
+    private int pageSize = 24;
     private string query = string.Empty;
     private decimal? selectedRating;
     private MediaType? mediaType;
