@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using Microsoft.Extensions.Options;
 
 namespace AfterHours.Services.Tmdb;
 
@@ -9,18 +10,24 @@ public static class TmdbExtension
         IConfiguration configuration
     )
     {
-        var tmdbToken =
-            configuration["Tmdb:ApiKey"]
-            ?? throw new InvalidOperationException("TMDB key is not configured.");
+        services
+            .AddOptions<TmdbOptions>()
+            .Bind(configuration.GetSection(TmdbOptions.Name))
+            .Validate(o => !string.IsNullOrWhiteSpace(o.ApiKey), "TMDB Api Key is not configured.")
+            .ValidateOnStart();
 
-        services.AddHttpClient<TmdbService>(client =>
-        {
-            client.BaseAddress = new Uri("https://api.themoviedb.org/3/");
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-                "Bearer",
-                tmdbToken
-            );
-        });
+        services.AddHttpClient<TmdbService>(
+            (sp, client) =>
+            {
+                var options = sp.GetRequiredService<IOptions<TmdbOptions>>().Value;
+
+                client.BaseAddress = new Uri(options.BaseUrl);
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                    "Bearer",
+                    options.ApiKey
+                );
+            }
+        );
 
         return services;
     }
