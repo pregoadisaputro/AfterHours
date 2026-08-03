@@ -13,7 +13,7 @@
 <div class="m-5 flex flex-col items-center justify-center gap-7">
     <input
     class="font-medium outline-none focus:ring-2 focus:ring-white mt-2 bg-[#121212] hover:bg-[#212121] border border-transparent hover:border-[#616161] transition-all duration-300 ease-in-out w-1/2 h-11 rounded-full px-6 py-2.5"
-    @bind="query" @bind:event="oninput" @bind:after="OnQueryChanged" placeholder="search movie or show" />
+    @bind="query" @bind:event="oninput" @bind:after="HandleQueryChanged" placeholder="search movie or show" />
 
     @if (isSearching)
     {
@@ -35,7 +35,7 @@
         <div class="grid grid-cols-5 gap-1">
             @foreach (var item in results.Results)
             {
-                <div @onclick="() => OpenMedia(item)">
+                <div @onclick="() => HandleOpenMedia(item)">
                     <MediaCard Title="@(item.Title ?? item.Name)" ImageUrl="@item.Poster_Path" />
                 </div>
             }
@@ -50,7 +50,7 @@
     private TmdbSearchResponse? results;
     private CancellationTokenSource? debounce;
 
-    private async Task OnQueryChanged()
+    private async Task HandleQueryChanged()
     {
         debounce?.Cancel();
         debounce?.Dispose();
@@ -114,7 +114,7 @@
         }
     }
 
-    private void OpenMedia(TmdbSearchResults item)
+    private void HandleOpenMedia(TmdbSearchResults item)
     {
 
         var type = item.Media_Type switch

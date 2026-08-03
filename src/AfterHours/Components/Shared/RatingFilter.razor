@@ -16,7 +16,7 @@
                 duration-300
                 ease-in-out
                 hover:scale-110 @(SelectedRating >= value ? "text-white" : "text-neutral-600 hover:text-white")"
-                    @onclick="() => RatingSelected.InvokeAsync(value)">
+                    @onclick="() => OnRatingChanged.InvokeAsync(value)">
                 ✪
             </button>
         }
@@ -29,5 +29,5 @@
     public decimal? SelectedRating { get; set; }
 
     [Parameter]
-    public EventCallback<decimal> RatingSelected { get; set; }
+    public EventCallback<decimal> OnRatingChanged { get; set; }
 }

@@ -13,7 +13,7 @@
 <div class="m-5 flex flex-col items-center justify-center gap-7">
     <input
     class="font-medium outline-none focus:ring-2 focus:ring-white mt-2 bg-[#121212] hover:bg-[#212121] border border-transparent hover:border-[#616161] transition-all duration-300 ease-in-out w-1/2 h-11 rounded-full px-6 py-2.5"
-    @bind="query" @bind:event="oninput" @bind:after="OnQueryChanged" placeholder="search movie or show" />
+    @bind="query" @bind:event="oninput" @bind:after="HandleQueryChanged" placeholder="search movie or show" />
 
     <div class="flex flex-wrap items-start justify-center gap-8">
 
@@ -38,7 +38,7 @@
         </div>
 
         <div class="flex items-center gap-2">
-            <StatusToggle CurrentStatus="mediaStatus" StatusSelected="OnStatusSelected" />
+            <StatusToggle CurrentStatus="mediaStatus" OnStatusChanged="HandleStatusChanged" />
 
             @if (mediaStatus.HasValue)
             {
@@ -50,7 +50,7 @@
         </div>
         <select
             class="text-center transition focus:border-white focus:ring-2 focus:ring-white appearance-none cursor-pointer rounded-full bg-[#121212] hover:bg-[#212121] border border-transparent px-4 py-3.5 text-sm font-medium outline-none"
-            @bind="SortBy" @bind:after="OnFiltersChanged">
+            @bind="sortBy" @bind:after="HandleFiltersChanged">
             <option value="@MediaSortBy.RecentlyAdded">recently added</option>
             <option value="@MediaSortBy.RecentlyUpdated">recently updated</option>
             <option value="@MediaSortBy.Id">id</option>
@@ -58,7 +58,7 @@
     </div>
 
     <div class="flex flex-col items-center gap-2">
-        <RatingFilter SelectedRating="selectedRating" RatingSelected="OnRatingSelected" />
+        <RatingFilter SelectedRating="selectedRating" OnRatingChanged="HandleRatingChanged" />
 
         @if (selectedRating.HasValue)
         {
@@ -98,7 +98,7 @@
         <div class="flex gap-4 items-center">
             <button
                 class="font-medium cursor-pointer disabled:cursor-not-allowed px-4 py-2 rounded-full bg-[#121212] hover:bg-[#212121] disabled:opacity-40 disabled:hover:bg-[#121212]"
-                disabled="@(!Goback)" @onclick="GoToPreviousPage">
+                disabled="@(!GoBack)" @onclick="GoToPreviousPage">
                 prev
             </button>
 
@@ -123,12 +123,12 @@
     private decimal? selectedRating;
     private MediaType? mediaType;
     private MediaStatus? mediaStatus;
-    private MediaSortBy SortBy = MediaSortBy.RecentlyAdded;
+    private MediaSortBy sortBy = MediaSortBy.RecentlyAdded;
     private bool isSearching;
     private string? errorMessage;
     private CancellationTokenSource? debounce;
 
-    private bool Goback => currentPage > 1;
+    private bool GoBack => currentPage > 1;
     private bool GoNext => response is not null && currentPage < response.TotalPages;
 
     protected override async Task OnInitializedAsync()
@@ -136,7 +136,7 @@
         await LoadPage();
     }
 
-    private async Task OnQueryChanged()
+    private async Task HandleQueryChanged()
     {
         debounce?.Cancel();
         debounce?.Dispose();
@@ -157,34 +157,34 @@
     private async Task SetMediaType(MediaType? value)
     {
         mediaType = value;
-        await OnFiltersChanged();
+        await HandleFiltersChanged();
     }
 
-    private async Task OnStatusSelected(MediaStatus value)
+    private async Task HandleStatusChanged(MediaStatus value)
     {
         mediaStatus = mediaStatus == value ? null : value;
-        await OnFiltersChanged();
+        await HandleFiltersChanged();
     }
 
     private async Task SetMediaStatus(MediaStatus? value)
     {
         mediaStatus = value;
-        await OnFiltersChanged();
+        await HandleFiltersChanged();
     }
 
-    private async Task OnRatingSelected(decimal value)
+    private async Task HandleRatingChanged(decimal value)
     {
         selectedRating = selectedRating == value ? null : value;
-        await OnFiltersChanged();
+        await HandleFiltersChanged();
     }
 
     private async Task SetRating(decimal? value)
     {
         selectedRating = value;
-        await OnFiltersChanged();
+        await HandleFiltersChanged();
     }
 
-    private async Task OnFiltersChanged()
+    private async Task HandleFiltersChanged()
     {
         currentPage = 1;
         await LoadPage();
@@ -206,7 +206,7 @@
                 selectedRating,
                 mediaType,
                 mediaStatus,
-                SortBy
+                sortBy
             );
 
             var result = await MediaService.GetMediasAsync(data, ct);
@@ -238,7 +238,7 @@
 
     private async Task GoToPreviousPage()
     {
-        if (!Goback)
+        if (!GoBack)
         {
             return;
         }

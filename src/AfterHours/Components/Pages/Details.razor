@@ -19,22 +19,22 @@ else
 
         <div class="mx-auto max-w-6xl overflow-hidden rounded-xl bg-black">
 
-            <Backdrop BackdropPath="@details.BackdropPath" Title="@details.Title" OnBack="GoBack" />
+            <Backdrop BackdropPath="@details.BackdropPath" Title="@details.Title" OnBack="HandleBack" />
 
             <div class="space-y-8 p-8">
 
                 <Info Title="@details.Title" ReleaseDate="@details.ReleaseDate" Runtime="@details.Runtime"
                       Overview="@details.Overview" />
 
-                <RatingSelector SelectedRating="selectedRating" RatingSelected="SetRating" />
+                <RatingSelector SelectedRating="selectedRating" OnRatingChanged="HandleRatingChanged" />
 
                 <div class="flex items-center justify-between">
 
-                    <StatusToggle CurrentStatus="@details.MediaStatus" StatusSelected="SaveStatus" />
+                    <StatusToggle CurrentStatus="@details.MediaStatus" OnStatusChanged="HandleStatusChanged" />
 
                     @if (details.IsSaved)
                     {
-                        <DeleteButton OnDelete="Delete" />
+                        <DeleteButton OnDelete="HandleDelete" />
                     }
                 </div>
 
@@ -71,7 +71,7 @@ else
         selectedRating = details?.Rating;
     }
 
-    private async Task SetRating(decimal value)
+    private async Task HandleRatingChanged(decimal value)
     {
         selectedRating = value;
 
@@ -92,7 +92,7 @@ else
         }
     }
 
-    private async Task SaveStatus(MediaStatus status)
+    private async Task HandleStatusChanged(MediaStatus status)
     {
         if (details is null)
             return;
@@ -125,7 +125,7 @@ else
         await ReloadDetails();
     }
 
-    private async Task Delete()
+    private async Task HandleDelete()
     {
         if (details?.Id is null)
         {
@@ -152,7 +152,7 @@ else
         };
     }
 
-    private void GoBack()
+    private void HandleBack()
     {
         Nav.NavigateTo("/search");
     }

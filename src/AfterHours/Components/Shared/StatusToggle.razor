@@ -14,9 +14,9 @@
             duration-300
             ease-in-out
             @(CurrentStatus == option
-                    ? "bg-white text-black"
-                    : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
-                @onclick="() => StatusSelected.InvokeAsync(option)">
+                                    ? "bg-white text-black"
+                                    : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
+                @onclick="() => OnStatusChanged.InvokeAsync(option)">
             @option.ToString().ToLower()
         </button>
     }
@@ -28,7 +28,7 @@
     public MediaStatus? CurrentStatus { get; set; }
 
     [Parameter]
-    public EventCallback<MediaStatus> StatusSelected { get; set; }
+    public EventCallback<MediaStatus> OnStatusChanged { get; set; }
 
     private static readonly MediaStatus[] StatusOptions =
     [
