@@ -6,7 +6,6 @@ public enum MediaSortBy
 {
     RecentlyAdded,
     RecentlyUpdated,
-    Id,
 }
 
 public record GetMediasRequest(

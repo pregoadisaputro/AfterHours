@@ -118,7 +118,6 @@ public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, 
             MediaSortBy.RecentlyUpdated => query
                 .OrderByDescending(m => m.UpdatedAt)
                 .ThenBy(m => m.Id),
-            MediaSortBy.Id => query.OrderBy(m => m.Id),
             _ => query.OrderByDescending(m => m.CreatedAt).ThenBy(m => m.Id),
         };
 
