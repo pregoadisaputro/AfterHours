@@ -10,7 +10,7 @@ public class MediaItem
     public decimal? Rating { get; set; }
     public MediaStatus MediaStatus { get; set; }
 
-    public string? Title { get; set; }
+    public string Title { get; set; } = string.Empty;
     public MediaType MediaType { get; set; }
     public string? PosterPath { get; set; }
     public string? BackdropPath { get; set; }
