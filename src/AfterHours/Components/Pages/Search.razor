@@ -20,7 +20,7 @@
         <p>searching...</p>
     }
 
-    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    @if (!string.IsNullOrEmpty(errorMessage))
     {
         <p>@errorMessage</p>
     }
@@ -114,12 +114,6 @@
         }
     }
 
-    public void Dispose()
-    {
-        debounce?.Cancel();
-        debounce?.Dispose();
-    }
-
     private void OpenMedia(TmdbSearchResults item)
     {
 
@@ -132,5 +126,11 @@
 
         Nav.NavigateTo($"/details/{type}/{item.Id}");
 
+    }
+
+    public void Dispose()
+    {
+        debounce?.Cancel();
+        debounce?.Dispose();
     }
 }

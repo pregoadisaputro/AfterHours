@@ -58,9 +58,9 @@
     </div>
 
     <div class="flex flex-col items-center gap-2">
-        <RatingFilter SelectedRating="rating" RatingSelected="OnRatingSelected" />
+        <RatingFilter SelectedRating="selectedRating" RatingSelected="OnRatingSelected" />
 
-        @if (rating.HasValue)
+        @if (selectedRating.HasValue)
         {
             <button class="cursor-pointer text-xs text-neutral-500 hover:text-white underline"
                     @onclick="() => SetRating(null)">
@@ -74,7 +74,7 @@
         <p>searching...</p>
     }
 
-    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    @if (!string.IsNullOrEmpty(errorMessage))
     {
         <p>@errorMessage</p>
     }
@@ -120,7 +120,7 @@
     private int currentPage = 1;
     private int pageSize = 10;
     private string query = string.Empty;
-    private decimal? rating;
+    private decimal? selectedRating;
     private MediaType? mediaType;
     private MediaStatus? mediaStatus;
     private MediaSortBy SortBy = MediaSortBy.RecentlyAdded;
@@ -174,13 +174,13 @@
 
     private async Task OnRatingSelected(decimal value)
     {
-        rating = rating == value ? null : value;
+        selectedRating = selectedRating == value ? null : value;
         await OnFiltersChanged();
     }
 
     private async Task SetRating(decimal? value)
     {
-        rating = value;
+        selectedRating = value;
         await OnFiltersChanged();
     }
 
@@ -203,7 +203,7 @@
                 currentPage,
                 pageSize,
                 currentQuery,
-                rating,
+                selectedRating,
                 mediaType,
                 mediaStatus,
                 SortBy
