@@ -9,16 +9,6 @@ namespace AfterHours.Features.Media.Services;
 
 public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, TmdbService tmdb)
 {
-    private static DateOnly? ParseDate(string? value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            return null;
-        }
-
-        return DateOnly.TryParseExact(value, "yyyy-MM-dd", out var result) ? result : null;
-    }
-
     public async Task<GetDetailsResponse?> GetDetailsAsync(
         MediaType mediaType,
         int externalId,
@@ -46,7 +36,7 @@ public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, 
                 movie.Overview,
                 movie.PosterPath,
                 movie.BackdropPath,
-                ParseDate(movie.ReleaseDate),
+                movie.ReleaseDate,
                 movie.Runtime,
                 MediaType.Movie,
                 media?.MediaStatus,
@@ -69,7 +59,7 @@ public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, 
             tv.Overview,
             tv.PosterPath,
             tv.BackdropPath,
-            ParseDate(tv.FirstAirDate),
+            tv.FirstAirDate,
             tv.Runtime,
             MediaType.Tv,
             media?.MediaStatus,
@@ -199,15 +189,13 @@ public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, 
 
     public async Task DeleteAsync(int id, CancellationToken ct = default)
     {
-        var deletedMedia = await db.MediaItems.FindAsync([id], ct);
+        var deletedMedia = await db.MediaItems.Where(m => m.Id == id).ExecuteDeleteAsync(ct);
 
-        if (deletedMedia is null)
+        if (deletedMedia == 0)
         {
+            logger.LogWarning("trying to delete not existing media with ID {MediaID}", id);
             return;
         }
-
-        db.MediaItems.Remove(deletedMedia);
-        await db.SaveChangesAsync(ct);
 
         logger.LogInformation("Deleted media with ID {MediaId}", id);
     }
