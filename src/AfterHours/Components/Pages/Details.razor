@@ -113,12 +113,18 @@ else
         }
         else
         {
+
+            if (details.Id is null)
+            {
+                return;
+            }
+
             var request = new UpdateMediaRequest(
                 selectedRating,
                 status);
 
             await MediaService.UpdateAsync(
-                details.Id!.Value,
+                details.Id.Value,
                 request);
         }
 
@@ -144,12 +150,12 @@ else
             throw new ArgumentException("media type is required.");
         }
 
-        return type.ToLower() switch
+        if (!Enum.TryParse<MediaType>(type, true, out var mediaType))
         {
-            "movie" => MediaType.Movie,
-            "tv" => MediaType.Tv,
-            _ => throw new ArgumentException("unknown media type.")
-        };
+            throw new ArgumentException("unknown media type.");
+        }
+
+        return mediaType;
     }
 
     private void HandleBack()
