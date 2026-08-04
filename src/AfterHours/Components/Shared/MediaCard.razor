@@ -1,15 +1,37 @@
 <div
-    class="flex flex-col h-full p-1.5 cursor-pointer rounded-[20px] hover:bg-[#212121] transition duration-300 ease-in-out">
+    class="relative flex flex-col h-full p-1.5 cursor-pointer rounded-[20px] hover:bg-[#212121] hover:scale-[1.03] hover:z-10 transition-transform duration-300 ease-in-out">
     @if (!string.IsNullOrEmpty(ImageUrl))
     {
-        <img class="w-full border-2 border-[#212121] aspect-2/3 object-cover rounded-[14px]"
-             src="@($"https://image.tmdb.org/t/p/w500{ImageUrl}")" alt="@Title">
+        <div class="relative">
+            <img class="w-full border-2 border-[#212121] aspect-2/3 object-cover rounded-[14px]"
+                 src="@($"https://image.tmdb.org/t/p/w500{ImageUrl}")" alt="@Title">
+
+            @if (Rating.HasValue)
+            {
+                <div class="absolute top-0 right-0 m-3">
+                    <div class="absolute -inset-3 rounded-full bg-black/30 blur-lg"></div>
+
+                    <div class="relative flex items-center gap-1 text-white text-3xl font-semibold">
+                        <span>
+                            @Rating.Value.ToString("0")
+                        </span>
+                        <span class="text-3xl">
+                            ★
+                        </span>
+                    </div>
+                </div>
+            }
+        </div>
     }
 </div>
 
 @code {
     [Parameter]
     public string? Title { get; set; }
+
+    [Parameter]
+    public decimal? Rating { get; set; }
+
     [Parameter]
     public string? ImageUrl { get; set; }
 }

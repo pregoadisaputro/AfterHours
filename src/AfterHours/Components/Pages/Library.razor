@@ -94,11 +94,11 @@
 
     @if (response is not null && response.Data.Count > 0)
     {
-        <div class="grid grid-cols-4">
+        <div class="grid grid-cols-5 gap-1">
             @foreach (var item in response.Data)
             {
                 <button class="border-0 bg-transparent p-0 text-left" @onclick="() => OpenMedia(item)">
-                    <MediaCard Title="@item.Title" ImageUrl="@item.PosterPath" />
+                    <MediaCard Title="@item.Title" Rating="@item.Rating" ImageUrl="@item.PosterPath" />
                 </button>
             }
         </div>
