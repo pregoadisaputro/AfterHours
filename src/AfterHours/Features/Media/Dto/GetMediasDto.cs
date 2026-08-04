@@ -30,7 +30,7 @@ public record GetMediasResponse(
     int Id,
     int ExternalId,
     decimal? Rating,
-    string? Title,
+    string Title,
     string? PosterPath,
     string? BackdropPath,
     DateOnly? ReleaseDate,
