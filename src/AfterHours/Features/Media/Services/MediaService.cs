@@ -154,6 +154,12 @@ public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, 
 
         if (existingMedia)
         {
+            logger.LogDebug(
+                "media with External ID {ExternalId} and Media Type {MediaType} already exists",
+                request.ExternalId,
+                request.MediaType
+            );
+
             return;
         }
 
