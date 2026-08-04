@@ -94,7 +94,7 @@
 
     @if (response is not null && response.Data.Count > 0)
     {
-        <div class="grid grid-cols-5 gap-1">
+        <div class="grid grid-cols-6 gap-1">
             @foreach (var item in response.Data)
             {
                 <button class="border-0 bg-transparent p-0 text-left" @onclick="() => OpenMedia(item)">
