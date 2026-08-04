@@ -1,8 +1,8 @@
 namespace AfterHours.Services.Tmdb;
 
-public class TmdbOptions
+public sealed class TmdbOptions
 {
     public const string Name = "Tmdb";
-    public required string ApiKey { get; set; }
-    public string BaseUrl { get; set; } = "https://api.themoviedb.org/3/";
+    public required string ApiKey { get; init; }
+    public string BaseUrl { get; init; } = "https://api.themoviedb.org/3/";
 }
