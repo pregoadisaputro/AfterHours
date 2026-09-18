@@ -16,7 +16,12 @@ public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, 
             return null;
         }
 
-        return DateOnly.TryParseExact(value, "yyyy-MM-dd", out var result) ? result : null;
+        if (!DateOnly.TryParseExact(value, "yyyy-MM-DD", out var result))
+        {
+            return null;
+        }
+
+        return result;
     }
 
     public async Task<GetDetailsResponse?> GetDetailsAsync(
