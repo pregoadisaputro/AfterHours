@@ -1,3 +1,4 @@
+using System.Globalization;
 using AfterHours.Data;
 using AfterHours.Data.Entity;
 using AfterHours.Data.Enum;
@@ -9,20 +10,16 @@ namespace AfterHours.Features.Media.Services;
 
 public sealed class MediaService(AppDbContext db, ILogger<MediaService> logger, TmdbService tmdb)
 {
-    private static DateOnly? ParseDate(string? value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            return null;
-        }
-
-        if (!DateOnly.TryParseExact(value, "yyyy-MM-DD", out var result))
-        {
-            return null;
-        }
-
-        return result;
-    }
+    private static DateOnly? ParseDate(string? value) =>
+        DateOnly.TryParseExact(
+            value,
+            "yyyy-MM-dd",
+            CultureInfo.InvariantCulture,
+            DateTimeStyles.None,
+            out var result
+        )
+            ? result
+            : null;
 
     public async Task<GetDetailsResponse?> GetDetailsAsync(
         MediaType mediaType,
