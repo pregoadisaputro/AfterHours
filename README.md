@@ -4,10 +4,8 @@
   <img src="screenshots/library.jpg" width="400" />
 </p>
 <p align="center">
-  <img src="screenshots/search_add.jpg" width="400" />
-</p>
-<p align="center">
-  <img src="screenshots/details.jpg" width="400" />
+  <img src="screenshots/search_add.jpg" width="380" />
+  <img src="screenshots/details.jpg" width="380" />
 </p>
 
 ## what is it?
@@ -55,20 +53,20 @@ instead of just reading/writing JSON like my last project lol.
 - install Node.js (needed for the Tailwind CLI build)
 - clone this project
 - restore npm packages:
-  ```
-  npm install
-  ```
+    ```
+    npm install
+    ```
 - get a free TMDB API read access Token (v4 auth):
   https://www.themoviedb.org/settings/api
 - set it as a user secret:
-  ```
-  dotnet user-secrets set "Tmdb:ApiKey" "your-read-access-token-here"
-  ```
+    ```
+    dotnet user-secrets set "Tmdb:ApiKey" "your-read-access-token-here"
+    ```
 - build the Tailwind CSS (in a separate terminal, keep it watching):
-  ```
-  npx @tailwindcss/cli -i Components/Styles/input.css -o wwwroot/app.css --watch
-  ```
+    ```
+    npx @tailwindcss/cli -i Components/Styles/input.css -o wwwroot/app.css --watch
+    ```
 - run the app:
-  ```
-  dotnet watch run
-  ```
+    ```
+    dotnet watch run
+    ```
