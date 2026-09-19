@@ -10,9 +10,7 @@
 
 ## what is it?
 
-AfterHours is my personal media tracker, but as a website (Blazor) — a
-follow-up to my [MediaArchive.Console](https://github.com/pregoadisaputro/MediaArchive.Console)
-project, now just for Movies and TV.
+AfterHours is my personal media tracker, just for Movies and TV.
 
 im making this to actually practice backend stuff properly, EF Core,
 vertical-slice architecture, and consuming a API (TMDB)
