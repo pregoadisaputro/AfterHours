@@ -1,4 +1,3 @@
-using System.Net;
 using AfterHours.Services.Tmdb.Dto;
 
 namespace AfterHours.Services.Tmdb;
@@ -8,36 +7,12 @@ public sealed class TmdbService(HttpClient client)
     public async Task<TmdbMovieDetailsResponse?> GetMovieDetailsAsync(
         int id,
         CancellationToken ct = default
-    )
-    {
-        var response = await client.GetAsync($"movie/{id}", ct);
-
-        if (response.StatusCode == HttpStatusCode.NotFound)
-        {
-            return null;
-        }
-
-        response.EnsureSuccessStatusCode();
-
-        return await response.Content.ReadFromJsonAsync<TmdbMovieDetailsResponse>(ct);
-    }
+    ) => await client.GetFromJsonAsync<TmdbMovieDetailsResponse>($"movie/{id}", ct);
 
     public async Task<TmdbTvDetailsResponse?> GetTvDetailsAsync(
         int id,
         CancellationToken ct = default
-    )
-    {
-        var response = await client.GetAsync($"tv/{id}", ct);
-
-        if (response.StatusCode == HttpStatusCode.NotFound)
-        {
-            return null;
-        }
-
-        response.EnsureSuccessStatusCode();
-
-        return await response.Content.ReadFromJsonAsync<TmdbTvDetailsResponse>(ct);
-    }
+    ) => await client.GetFromJsonAsync<TmdbTvDetailsResponse>($"tv/{id}", ct);
 
     public async Task<TmdbSearchResponse?> SearchAsync(
         string query,
@@ -45,14 +20,9 @@ public sealed class TmdbService(HttpClient client)
         CancellationToken ct = default
     )
     {
-        var response = await client.GetAsync(
-            $"search/multi?query={Uri.EscapeDataString(query)}&page={page}",
-            ct
-        );
+        var url = $"search/multi?query={Uri.EscapeDataString(query)}&page={page}";
 
-        response.EnsureSuccessStatusCode();
-
-        var result = await response.Content.ReadFromJsonAsync<TmdbSearchResponse>(ct);
+        var result = await client.GetFromJsonAsync<TmdbSearchResponse>(url, ct);
 
         if (result is null)
         {
