@@ -52,6 +52,9 @@ else
     [Parameter]
     public int Id { get; set; }
 
+    [SupplyParameterFromQuery(Name = "from")]
+    public string? From { get; set; }
+
     private GetDetailsResponse? details;
 
     private decimal? selectedRating;
@@ -162,6 +165,12 @@ else
 
     private void HandleBack()
     {
-        Nav.NavigateTo("/search");
+        var target = From switch
+        {
+            "library" => "/library",
+            _ => "/search"
+        };
+
+        Nav.NavigateTo(target);
     }
 }

@@ -274,7 +274,7 @@
     private void OpenMedia(GetMediasResponse item)
     {
 
-        Nav.NavigateTo($"/details/{item.MediaType}/{item.ExternalId}");
+        Nav.NavigateTo($"/details/{item.MediaType}/{item.ExternalId}?from=library");
     }
 
     public void Dispose()
