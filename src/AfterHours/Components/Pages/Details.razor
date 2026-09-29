@@ -1,11 +1,13 @@
 @page "/details/{Type}/{Id:int}"
 
-@using AfterHours.Data.Enum
-@using AfterHours.Features.Media.Dto
-@using AfterHours.Features.Media.Services
 @using AfterHours.Components.Shared
+@using AfterHours.Data.Enum
+@using AfterHours.Features.Media
 
-@inject MediaService MediaService
+@inject GetMediaDetails GetMediaDetails
+@inject CreateMedia CreateMedia
+@inject UpdateMedia UpdateMedia
+@inject DeleteMedia DeleteMedia
 @inject NavigationManager Nav
 
 
@@ -64,7 +66,7 @@ else
 
     private async Task ReloadDetails()
     {
-        details = await MediaService.GetDetailsAsync(
+        details = await GetMediaDetails.GetAsync(
             ParseMediaType(Type),
             Id);
 
@@ -84,7 +86,7 @@ else
                 selectedRating,
                 details.MediaStatus ?? MediaStatus.Planned);
 
-            await MediaService.UpdateAsync(
+            await UpdateMedia.HandleAsync(
                 details.Id.Value,
                 request);
 
@@ -109,7 +111,7 @@ else
                 details.ReleaseDate,
                 status);
 
-            await MediaService.CreateAsync(request);
+            await CreateMedia.HandleAsync(request);
         }
         else
         {
@@ -123,7 +125,7 @@ else
                 selectedRating,
                 status);
 
-            await MediaService.UpdateAsync(
+            await UpdateMedia.HandleAsync(
                 details.Id.Value,
                 request);
         }
@@ -138,7 +140,7 @@ else
             return;
         }
 
-        await MediaService.DeleteAsync(details.Id.Value);
+        await DeleteMedia.HandleAsync(details.Id.Value);
 
         Nav.NavigateTo("/library");
     }
