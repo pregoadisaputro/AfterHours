@@ -26,10 +26,10 @@ public record TmdbSearchResponse(
     int Page,
     [property: JsonPropertyName("total_pages")] int TotalPages,
     [property: JsonPropertyName("total_results")] int TotalResults,
-    IReadOnlyList<TmdbSearchResults> Results
+    IReadOnlyList<TmdbSearchDto> Results
 );
 
-public record TmdbSearchResults(
+public record TmdbSearchDto(
     int Id,
     string? Title,
     string? Name,
