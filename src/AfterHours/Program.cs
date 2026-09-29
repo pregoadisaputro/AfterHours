@@ -1,6 +1,6 @@
 using AfterHours.Components;
 using AfterHours.Data;
-using AfterHours.Features.Media.Services;
+using AfterHours.Features.Media;
 using AfterHours.Services.Tmdb;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +9,7 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddTmdbClient(builder.Configuration);
-
-builder.Services.AddScoped<MediaService>();
+builder.Services.AddMediaFeature();
 
 var app = builder.Build();
 
