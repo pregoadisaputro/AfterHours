@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
+builder.Services.AddMemoryCache();
+
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddTmdbClient(builder.Configuration);
 builder.Services.AddMediaFeature();

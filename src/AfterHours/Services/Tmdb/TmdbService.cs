@@ -1,18 +1,55 @@
 using AfterHours.Services.Tmdb.Dto;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace AfterHours.Services.Tmdb;
 
-public sealed class TmdbService(HttpClient client)
+public sealed class TmdbService(HttpClient client, IMemoryCache cache)
 {
+    private static readonly TimeSpan DetailsDuration = TimeSpan.FromHours(6);
+
     public async Task<TmdbMovieDetailsResponse?> GetMovieDetailsAsync(
         int id,
         CancellationToken ct = default
-    ) => await client.GetFromJsonAsync<TmdbMovieDetailsResponse>($"movie/{id}", ct);
+    )
+    {
+        var key = $"tmdb:movie:{id}";
+
+        if (cache.TryGetValue(key, out TmdbMovieDetailsResponse? cached))
+        {
+            return cached;
+        }
+
+        var movie = await client.GetFromJsonAsync<TmdbMovieDetailsResponse>($"movie/{id}", ct);
+
+        if (movie is not null)
+        {
+            cache.Set(key, movie, DetailsDuration);
+        }
+
+        return movie;
+    }
 
     public async Task<TmdbTvDetailsResponse?> GetTvDetailsAsync(
         int id,
         CancellationToken ct = default
-    ) => await client.GetFromJsonAsync<TmdbTvDetailsResponse>($"tv/{id}", ct);
+    )
+    {
+        var key = $"tmdb:tv:{id}";
+
+        if (cache.TryGetValue(key, out TmdbTvDetailsResponse? cached))
+        {
+            return cached;
+        }
+
+        var tv = await client.GetFromJsonAsync<TmdbTvDetailsResponse>($"tv/{id}", ct);
+
+        if (tv is not null)
+        {
+            cache.Set(key, tv, DetailsDuration);
+        }
+
+        return tv;
+    }
 
     public async Task<TmdbSearchResponse?> SearchAsync(
         string query,
