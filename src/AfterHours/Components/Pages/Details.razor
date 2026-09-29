@@ -1,5 +1,6 @@
 @page "/details/{Type}/{Id:int}"
 
+
 @using AfterHours.Components.Shared
 @using AfterHours.Data.Enum
 @using AfterHours.Features.Media
@@ -59,6 +60,8 @@ else
 
     private decimal? selectedRating;
 
+ 
+
     protected override async Task OnParametersSetAsync()
     {
         if (Id == 0)
@@ -70,8 +73,8 @@ else
     private async Task ReloadDetails()
     {
         details = await GetMediaDetails.GetAsync(
-            ParseMediaType(Type),
-            Id);
+        ParseMediaType(Type),
+        Id);
 
         selectedRating = details?.Rating;
     }

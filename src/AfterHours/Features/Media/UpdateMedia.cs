@@ -16,8 +16,6 @@ public sealed class UpdateMedia(IDbContextFactory<AppDbContext> db, ILogger<Upda
     {
         using var dbCtx = await db.CreateDbContextAsync(ct);
 
-        logger.LogInformation("Updated Media with ID {MediaId}", id);
-
         var exsitingMedia =
             await dbCtx.MediaItems.FindAsync([id], ct)
             ?? throw new KeyNotFoundException($"Media with ID {id} was not found.");
@@ -27,5 +25,7 @@ public sealed class UpdateMedia(IDbContextFactory<AppDbContext> db, ILogger<Upda
         exsitingMedia.UpdatedAt = DateTime.UtcNow;
 
         await dbCtx.SaveChangesAsync(ct);
+
+        logger.LogInformation("Updated Media with ID {MediaId}", id);
     }
 }
