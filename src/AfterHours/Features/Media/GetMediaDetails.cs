@@ -33,7 +33,8 @@ public sealed class GetMediaDetails(IDbContextFactory<AppDbContext> db, TmdbServ
 
         var media = await dbCtx
             .MediaItems.AsNoTracking()
-            .FirstOrDefaultAsync(m => m.ExternalId == externalId && m.MediaType == mediaType, ct);
+            .Where(m => m.ExternalId == externalId && m.MediaType == mediaType)
+            .FirstOrDefaultAsync(ct);
 
         if (mediaType == MediaType.Movie)
         {
