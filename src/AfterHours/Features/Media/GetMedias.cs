@@ -34,8 +34,6 @@ public record GetMediasResponse(
     decimal? Rating,
     string Title,
     string? PosterPath,
-    string? BackdropPath,
-    DateOnly? ReleaseDate,
     MediaType MediaType,
     MediaStatus MediaStatus
 );
@@ -100,8 +98,6 @@ public sealed class GetMedias(IDbContextFactory<AppDbContext> db)
                 m.Rating,
                 m.Title,
                 m.PosterPath,
-                m.BackdropPath,
-                m.ReleaseDate,
                 m.MediaType,
                 m.MediaStatus
             ))

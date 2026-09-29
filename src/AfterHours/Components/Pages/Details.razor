@@ -111,8 +111,6 @@ else
                 details.Title ?? string.Empty,
                 ParseMediaType(Type),
                 details.PosterPath,
-                details.BackdropPath,
-                details.ReleaseDate,
                 status);
 
             await CreateMedia.HandleAsync(request);

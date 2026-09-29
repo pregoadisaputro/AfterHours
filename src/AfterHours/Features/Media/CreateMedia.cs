@@ -11,8 +11,6 @@ public record CreateMediaRequest(
     string Title,
     MediaType MediaType,
     string? PosterPath,
-    string? BackdropPath,
-    DateOnly? ReleaseDate,
     MediaStatus MediaStatus
 );
 
@@ -47,8 +45,6 @@ public sealed class CreateMedia(IDbContextFactory<AppDbContext> db, ILogger<Crea
             Title = request.Title,
             MediaType = request.MediaType,
             PosterPath = request.PosterPath,
-            BackdropPath = request.BackdropPath,
-            ReleaseDate = request.ReleaseDate,
             MediaStatus = request.MediaStatus,
         };
 
