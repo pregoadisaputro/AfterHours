@@ -29,7 +29,7 @@ public sealed class GetMediaDetails(IDbContextFactory<AppDbContext> db, TmdbServ
         CancellationToken ct = default
     )
     {
-        using var dbCtx = await db.CreateDbContextAsync(ct);
+        await using var dbCtx = await db.CreateDbContextAsync(ct);
 
         var media = await dbCtx
             .MediaItems.AsNoTracking()

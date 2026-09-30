@@ -53,7 +53,7 @@ public sealed class GetMedias(IDbContextFactory<AppDbContext> db)
             _ => request.PageSize,
         };
 
-        using var dbCtx = await db.CreateDbContextAsync(ct);
+        await using var dbCtx = await db.CreateDbContextAsync(ct);
 
         var query = dbCtx.MediaItems.AsNoTracking().AsQueryable();
 

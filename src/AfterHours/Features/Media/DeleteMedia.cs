@@ -7,7 +7,7 @@ public sealed class DeleteMedia(IDbContextFactory<AppDbContext> db, ILogger<Dele
 {
     public async Task HandleAsync(int id, CancellationToken ct = default)
     {
-        using var dbCtx = await db.CreateDbContextAsync(ct);
+        await using var dbCtx = await db.CreateDbContextAsync(ct);
 
         var deleteCount = await dbCtx.MediaItems.Where(m => m.Id == id).ExecuteDeleteAsync(ct);
 

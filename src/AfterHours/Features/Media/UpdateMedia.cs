@@ -14,7 +14,7 @@ public sealed class UpdateMedia(IDbContextFactory<AppDbContext> db, ILogger<Upda
         CancellationToken ct = default
     )
     {
-        using var dbCtx = await db.CreateDbContextAsync(ct);
+        await using var dbCtx = await db.CreateDbContextAsync(ct);
 
         var exsitingMedia =
             await dbCtx.MediaItems.FindAsync([id], ct)

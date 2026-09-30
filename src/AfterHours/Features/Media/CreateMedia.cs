@@ -18,7 +18,7 @@ public sealed class CreateMedia(IDbContextFactory<AppDbContext> db, ILogger<Crea
 {
     public async Task HandleAsync(CreateMediaRequest request, CancellationToken ct = default)
     {
-        using var dbCtx = await db.CreateDbContextAsync(ct);
+        await using var dbCtx = await db.CreateDbContextAsync(ct);
 
         var existingMedia = await dbCtx
             .MediaItems.AsNoTracking()
