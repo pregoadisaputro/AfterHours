@@ -2,7 +2,7 @@
 
 <div class="inline-flex gap-2 rounded-full bg-[#121212] p-1">
 
-    @foreach (var option in StatusOptions)
+    @foreach (var option in Enum.GetValues<MediaStatus>())
     {
         <button class="
             cursor-pointer
@@ -14,8 +14,8 @@
             duration-300
             ease-in-out
             @(CurrentStatus == option
-                                    ? "bg-white text-black"
-                                    : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
+                        ? "bg-white text-black"
+                        : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
                 @onclick="() => OnStatusChanged.InvokeAsync(option)">
             @option.ToString().ToLower()
         </button>
@@ -30,10 +30,5 @@
     [Parameter]
     public EventCallback<MediaStatus> OnStatusChanged { get; set; }
 
-    private static readonly MediaStatus[] StatusOptions =
-    [
-        MediaStatus.Planned,
-        MediaStatus.Completed,
-        MediaStatus.Dropped
-    ];
+  
 }
