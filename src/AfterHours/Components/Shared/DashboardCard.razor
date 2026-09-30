@@ -10,5 +10,10 @@
     [Parameter]
     public int TotalItems { get; set; }
 
-    private string Label => MediaType == MediaType.Movie ? "movies" : "tv";
+    private string Label => MediaType switch
+    {
+        MediaType.Movie => "movies",
+        MediaType.Tv => "tv",
+        _ => MediaType.ToString().ToLower()
+    };
 }
