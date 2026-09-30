@@ -11,6 +11,8 @@ public static class DependencyInjection
         services.AddScoped<GetMediaDetails>();
         services.AddScoped<GetMedias>();
 
+        services.AddScoped<GetDashboardStats>();
+
         return services;
     }
 }
