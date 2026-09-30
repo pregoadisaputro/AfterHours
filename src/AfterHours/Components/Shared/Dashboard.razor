@@ -1,0 +1,44 @@
+@using AfterHours.Data.Enum
+@using AfterHours.Features.Media
+@inject GetDashboardStats GetDashboardStats
+
+@if (errorMessage is not null)
+{
+    <p class="text-red-400">@errorMessage</p>
+}
+else if (totals is null)
+{
+    <p class="text-neutral-400">loading...</p>
+}
+else if (totals.Count == 0)
+{
+    <p class="text-neutral-400">no media yet.</p>
+}
+else
+{
+    <div class="grid grid-cols-2 gap-4">
+        @foreach (var type in Enum.GetValues<MediaType>())
+        {
+            var total = totals.FirstOrDefault(t => t.MediaType == type)?.TotalItems ?? 0;
+
+            <DashboardCard MediaType="@type" TotalItems="@total" />
+        }
+    </div>
+}
+
+@code {
+    private IReadOnlyList<GetDashboardStatsReponse>? totals;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            totals = await GetDashboardStats.GetAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+    }
+}

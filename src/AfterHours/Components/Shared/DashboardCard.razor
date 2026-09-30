@@ -1,0 +1,14 @@
+@using AfterHours.Data.Enum
+<div class="flex flex-col items-center gap-1 rounded-xl border border-[#212121] px-8 py-6">
+    <p class="text-4xl font-semibold text-white">@TotalItems</p>
+    <p class="text-sm text-neutral-400">@Label</p>
+</div>
+
+@code {
+    [Parameter]
+    public MediaType MediaType { get; set; }
+    [Parameter]
+    public int TotalItems { get; set; }
+
+    private string Label => MediaType == MediaType.Movie ? "movies" : "tv";
+}
