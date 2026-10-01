@@ -33,8 +33,7 @@
 
     private async Task ToggleRating(decimal value)
     {
-        var newRating = SelectedRating == value
-        ? null : (decimal?)value;
+        var newRating = SelectedRating == value ? null : (decimal?)value;
 
         await SelectedRatingChanged.InvokeAsync(newRating);
     }
