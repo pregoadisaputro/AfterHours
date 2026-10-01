@@ -37,7 +37,7 @@
         </div>
 
         <div class="flex items-center gap-2">
-            <StatusToggle CurrentStatus="mediaStatus" OnStatusChanged="HandleStatusChanged" />
+            <StatusToggle @bind-SelectedStatus="mediaStatus" @bind-SelectedStatus:after="HandleFiltersChanged" />
 
             @if (mediaStatus.HasValue)
             {
@@ -65,7 +65,7 @@
     </div>
 
     <div class="flex flex-col items-center gap-2">
-        <RatingFilter SelectedRating="selectedRating" OnRatingChanged="HandleRatingChanged" />
+        <RatingFilter @bind-SelectedRating="selectedRating" @bind-SelectedRating:after="HandleFiltersChanged" />
 
         @if (selectedRating.HasValue)
         {
@@ -143,66 +143,6 @@
         await LoadPage();
     }
 
-    private async Task HandleQueryChanged()
-    {
-        debounce?.Cancel();
-        debounce?.Dispose();
-
-        debounce = new CancellationTokenSource();
-
-        try
-        {
-            await Task.Delay(300, debounce.Token);
-            currentPage = 1;
-            await LoadPage(debounce.Token);
-        }
-        catch (TaskCanceledException)
-        {
-        }
-    }
-
-    private async Task SetMediaType(MediaType? value)
-    {
-        mediaType = value;
-        await HandleFiltersChanged();
-    }
-
-    private async Task SetSortBy(MediaSortBy value)
-    {
-        sortBy = value;
-        await HandleFiltersChanged();
-    }
-
-    private async Task HandleStatusChanged(MediaStatus value)
-    {
-        mediaStatus = mediaStatus == value ? null : value;
-        await HandleFiltersChanged();
-    }
-
-    private async Task SetMediaStatus(MediaStatus? value)
-    {
-        mediaStatus = value;
-        await HandleFiltersChanged();
-    }
-
-    private async Task HandleRatingChanged(decimal value)
-    {
-        selectedRating = selectedRating == value ? null : value;
-        await HandleFiltersChanged();
-    }
-
-    private async Task SetRating(decimal? value)
-    {
-        selectedRating = value;
-        await HandleFiltersChanged();
-    }
-
-    private async Task HandleFiltersChanged()
-    {
-        currentPage = 1;
-        await LoadPage();
-    }
-
     private async Task LoadPage(CancellationToken ct = default)
     {
         isSearching = true;
@@ -247,6 +187,54 @@
                 isSearching = false;
             }
         }
+    }
+
+    private async Task HandleQueryChanged()
+    {
+        debounce?.Cancel();
+        debounce?.Dispose();
+
+        debounce = new CancellationTokenSource();
+
+        try
+        {
+            await Task.Delay(300, debounce.Token);
+            currentPage = 1;
+            await LoadPage(debounce.Token);
+        }
+        catch (TaskCanceledException)
+        {
+        }
+    }
+
+    private async Task HandleFiltersChanged()
+    {
+        currentPage = 1;
+        await LoadPage();
+    }
+
+    private async Task SetMediaType(MediaType? value)
+    {
+        mediaType = value;
+        await HandleFiltersChanged();
+    }
+
+    private async Task SetMediaStatus(MediaStatus? value)
+    {
+        mediaStatus = value;
+        await HandleFiltersChanged();
+    }
+
+    private async Task SetSortBy(MediaSortBy value)
+    {
+        sortBy = value;
+        await HandleFiltersChanged();
+    }
+
+    private async Task SetRating(decimal? value)
+    {
+        selectedRating = value;
+        await HandleFiltersChanged();
     }
 
     private async Task GoToPreviousPage()

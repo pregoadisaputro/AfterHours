@@ -13,10 +13,10 @@
             transition
             duration-300
             ease-in-out
-            @(CurrentStatus == option
-            ? "bg-white text-black"
-            : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
-                @onclick="() => OnStatusChanged.InvokeAsync(option)">
+            @(SelectedStatus == option
+    ? "bg-white text-black"
+    : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
+                @onclick="() => SelectedStatusChanged.InvokeAsync(option)">
             @option.ToString().ToLower()
         </button>
     }
@@ -25,10 +25,16 @@
 @code {
 
     [Parameter]
-    public MediaStatus? CurrentStatus { get; set; }
+    public MediaStatus? SelectedStatus { get; set; }
 
     [Parameter]
-    public EventCallback<MediaStatus> OnStatusChanged { get; set; }
+    public EventCallback<MediaStatus?> SelectedStatusChanged { get; set; }
 
-  
+    private async Task ToggleStatus(MediaStatus value)
+    {
+        var newStatus = SelectedStatus == value
+        ? null : (MediaStatus?)value;
+
+        await SelectedStatusChanged.InvokeAsync(value);
+    }
 }
