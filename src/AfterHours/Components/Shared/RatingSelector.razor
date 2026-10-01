@@ -12,7 +12,7 @@
 
         @for (var i = 1; i <= 10; i++)
         {
-            var value = i;
+            var value = (decimal)i;
 
             <button class="
                 cursor-pointer
@@ -21,7 +21,7 @@
                 duration-300
                 ease-in-out
                 hover:scale-110 @(SelectedRating >= value ? "text-white" : "text-neutral-600 hover:text-white")"
-                    @onclick="() => SelectedRatingChanged.InvokeAsync(value)">
+                    @onclick="() => ToggleRating(value)">
                 ✪
             </button>
         }
@@ -36,10 +36,10 @@
     [Parameter]
     public EventCallback<decimal?> SelectedRatingChanged { get; set; }
 
-    private async Task ToggleRating(decimal value)
+    private Task ToggleRating(decimal value)
     {
-        var newRating = SelectedRating == value ? null : (decimal?)value;
+        decimal? newRating = SelectedRating == value ? null : value;
 
-        await SelectedRatingChanged.InvokeAsync(newRating);
+        return SelectedRatingChanged.InvokeAsync(newRating);
     }
 }
