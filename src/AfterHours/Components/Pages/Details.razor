@@ -84,7 +84,7 @@ else
                 details.Title ?? string.Empty,
                 ParseMediaType(Type),
                 details.PosterPath,
-                MediaStatus.Planned);
+                selectedStatus ?? MediaStatus.Completed);
 
             await CreateMedia.HandleAsync(request);
         }
@@ -92,7 +92,7 @@ else
         {
             var request = new UpdateMediaRequest(
                 selectedRating,
-                details.MediaStatus ?? MediaStatus.Planned);
+                details.MediaStatus ?? MediaStatus.Completed);
 
             await UpdateMedia.HandleAsync(details.Id.Value, request);
         }
