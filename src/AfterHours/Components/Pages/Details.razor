@@ -40,14 +40,9 @@ else
 }
 
 @code {
-    [Parameter]
-    public string Type { get; set; } = string.Empty;
-
-    [Parameter]
-    public int Id { get; set; }
-
-    [SupplyParameterFromQuery(Name = "from")]
-    public string? From { get; set; }
+    [Parameter] public string Type { get; set; } = string.Empty;
+    [Parameter] public int Id { get; set; }
+    [SupplyParameterFromQuery(Name = "from")] public string? From { get; set; }
 
     private GetDetailsResponse? details;
     private decimal? selectedRating;
