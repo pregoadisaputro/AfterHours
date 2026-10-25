@@ -1,8 +1,6 @@
-@using AfterHours.Data.Enum
-@using AfterHours.Features.Media
 @inject GetDashboardStats GetDashboardStats
 
-@if (errorMessage is not null)
+@if (!string.IsNullOrWhiteSpace(errorMessage))
 {
     <p class="text-red-400">@errorMessage</p>
 }
@@ -21,7 +19,7 @@ else
         {
             var total = totals.FirstOrDefault(t => t.MediaType == type)?.TotalItems ?? 0;
 
-            <DashboardCard MediaType="@type" TotalItems="@total" />
+            <DashboardCard @key="type" MediaType="@type" TotalItems="@total" />
         }
     </div>
 }
@@ -38,7 +36,7 @@ else
         }
         catch (Exception ex)
         {
-            errorMessage = ex.Message;
+            errorMessage = ex.Message ?? "something wrong.";
         }
     }
 }

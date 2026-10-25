@@ -1,10 +1,9 @@
 @using AfterHours.Data.Enum
 
 <div class="inline-flex gap-2 rounded-full bg-[#121212] p-1">
-
     @foreach (var option in Enum.GetValues<MediaStatus>())
     {
-        <button type="button" class="
+        <button @key="option" type="button" class="
             cursor-pointer
             rounded-full
             px-4
@@ -13,9 +12,7 @@
             transition
             duration-300
             ease-in-out
-            @(SelectedStatus == option
-    ? "bg-white text-black"
-    : "text-neutral-400 hover:text-white hover:bg-[#212121]")" @onclick="() => ToggleStatus(option)">
+            @SelectedStatusClass(option)" @onclick="() => ToggleStatus(option)">
             @option.ToString().ToLower()
         </button>
     }
@@ -23,16 +20,15 @@
 
 @code {
 
-    [Parameter]
-    public MediaStatus? SelectedStatus { get; set; }
+    [Parameter] public MediaStatus? SelectedStatus { get; set; }
+    [Parameter] public EventCallback<MediaStatus?> SelectedStatusChanged { get; set; }
 
-    [Parameter]
-    public EventCallback<MediaStatus?> SelectedStatusChanged { get; set; }
-
-    private Task ToggleStatus(MediaStatus value)
+    private async Task ToggleStatus(MediaStatus value)
     {
-        MediaStatus? newStatus = SelectedStatus == value ? null : value;
-
-        return SelectedStatusChanged.InvokeAsync(newStatus);
+        var newStatus = SelectedStatus == value ? null : (MediaStatus?)value;
+        await SelectedStatusChanged.InvokeAsync(newStatus);
     }
+
+    private string SelectedStatusClass(MediaStatus? status) => SelectedStatus == status
+    ? "bg-white text-black" : "text-neutral-400 hover:text-white hover:bg-[#212121]";
 }

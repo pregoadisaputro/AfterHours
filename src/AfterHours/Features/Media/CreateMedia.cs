@@ -34,7 +34,6 @@ public sealed class CreateMedia(IDbContextFactory<AppDbContext> db, ILogger<Crea
                 request.ExternalId,
                 request.MediaType
             );
-
             return;
         }
 

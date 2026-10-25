@@ -1,12 +1,5 @@
 @page "/search"
-
 @implements IDisposable
-
-@using AfterHours.Components.Shared
-@using AfterHours.Services.Tmdb
-@using AfterHours.Services.Tmdb.Dto
-@using AfterHours.Data.Enum
-
 @inject NavigationManager Nav
 @inject TmdbService Tmdb
 
@@ -19,15 +12,13 @@
     {
         <p>searching...</p>
     }
-
-    @if (!string.IsNullOrEmpty(errorMessage))
+    else if (!string.IsNullOrWhiteSpace(errorMessage))
     {
-        <p>@errorMessage</p>
+        <p class="text-red-500">@errorMessage</p>
     }
-
-    @if (results is not null)
+    else if (!string.IsNullOrWhiteSpace(query.Trim()) && results is not null)
     {
-        @if (results.Results.Count == 0)
+        @if (results.Results is null || results.TotalResults == 0)
         {
             <div class="py-16 text-center">
                 <p class="text-lg font-medium">no results found.</p>
@@ -43,7 +34,7 @@
                 @foreach (var item in results.Results)
                 {
                     <button class="border-0 bg-transparent p-0 text-left" @onclick="() => HandleOpenMedia(item)">
-                        <MediaCard Title="@(item.Title ?? item.Name)" ImageUrl="@item.PosterPath" />
+                        <MediaCard @key="item.Id" Title="@(item.Title ?? item.Name)" ImageUrl="@item.PosterPath" />
                     </button>
                 }
             </div>
@@ -62,7 +53,6 @@
     {
         debounce?.Cancel();
         debounce?.Dispose();
-
         debounce = new CancellationTokenSource();
 
         try
@@ -70,7 +60,7 @@
             await Task.Delay(300, debounce.Token);
             await SearchAsync(debounce.Token);
         }
-        catch (TaskCanceledException)
+        catch (OperationCanceledException)
         {
         }
     }
@@ -83,6 +73,7 @@
         {
             results = null;
             errorMessage = null;
+            isSearching = false;
             return;
         }
 
@@ -98,12 +89,9 @@
                 results = response;
             }
         }
-
         catch (OperationCanceledException)
         {
-
         }
-
         catch (Exception ex)
         {
             if (currentQuery == query.Trim())
@@ -114,17 +102,12 @@
         }
         finally
         {
-            if (!ct.IsCancellationRequested)
-            {
-                isSearching = false;
-
-            }
+            isSearching = false;
         }
     }
 
     private void HandleOpenMedia(TmdbSearchDto item)
     {
-
         var type = item.MediaType switch
         {
             "movie" => MediaType.Movie,
@@ -133,7 +116,6 @@
         };
 
         Nav.NavigateTo($"/details/{type}/{item.Id}?from=search");
-
     }
 
     public void Dispose()

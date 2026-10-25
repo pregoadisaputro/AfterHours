@@ -55,7 +55,7 @@ public sealed class GetMedias(IDbContextFactory<AppDbContext> db)
 
         await using var dbCtx = await db.CreateDbContextAsync(ct);
 
-        var query = dbCtx.MediaItems.AsNoTracking().AsQueryable();
+        var query = dbCtx.MediaItems.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(request.Title))
         {

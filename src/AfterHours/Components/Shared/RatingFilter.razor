@@ -2,7 +2,6 @@
     <p class="text-center text-xs font-medium text-neutral-500">
         filter by rating
     </p>
-
     <div class="flex gap-1">
 
         @for (var i = 1; i <= 10; i++)
@@ -25,17 +24,13 @@
 
 @code {
 
-    [Parameter]
-    public decimal? SelectedRating { get; set; }
+    [Parameter] public decimal? SelectedRating { get; set; }
+    [Parameter] public EventCallback<decimal?> SelectedRatingChanged { get; set; }
 
-    [Parameter]
-    public EventCallback<decimal?> SelectedRatingChanged { get; set; }
-
-    private Task ToggleRating(decimal value)
+    private async Task ToggleRating(decimal value)
     {
-        decimal? newRating = SelectedRating == value ? null : value;
-
-        return SelectedRatingChanged.InvokeAsync(newRating);
+        var newRating = SelectedRating == value ? null : (decimal?)value;
+        await SelectedRatingChanged.InvokeAsync(newRating);
     }
 
 }

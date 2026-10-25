@@ -41,9 +41,7 @@ public sealed class GetMediaDetails(IDbContextFactory<AppDbContext> db, TmdbServ
             var movie = await tmdbService.GetMovieDetailsAsync(externalId, ct);
 
             if (movie is null)
-            {
                 return null;
-            }
 
             return new GetDetailsResponse(
                 media?.Id,
@@ -64,9 +62,7 @@ public sealed class GetMediaDetails(IDbContextFactory<AppDbContext> db, TmdbServ
         var tv = await tmdbService.GetTvDetailsAsync(externalId, ct);
 
         if (tv is null)
-        {
             return null;
-        }
 
         return new GetDetailsResponse(
             media?.Id,

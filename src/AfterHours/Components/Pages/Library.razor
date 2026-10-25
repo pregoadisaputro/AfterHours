@@ -1,11 +1,5 @@
 ﻿@page "/library"
-
 @implements IDisposable
-
-@using AfterHours.Components.Shared
-@using AfterHours.Data.Enum
-@using AfterHours.Features.Media
-
 @inject GetMedias GetMedias
 @inject NavigationManager Nav
 
@@ -13,9 +7,7 @@
     <input
     class="font-medium outline-none focus:ring-2 focus:ring-white mt-2 bg-[#121212] hover:bg-[#212121] border border-transparent hover:border-[#616161] transition-all duration-300 ease-in-out w-1/2 h-11 rounded-full px-6 py-2.5"
     @bind="query" @bind:event="oninput" @bind:after="HandleQueryChanged" placeholder="search movie or show" />
-
     <div class="flex flex-wrap items-start justify-center gap-4">
-
         <div class="inline-flex gap-2 rounded-full bg-[#121212] p-1">
             <button class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out 
                 @(mediaType is null ? "bg-white text-black" : "text-neutral-400 hover:text-white hover:bg-[#212121]")"
@@ -35,7 +27,6 @@
                 tv
             </button>
         </div>
-
         <div class="flex items-center gap-2">
             <StatusToggle @bind-SelectedStatus="mediaStatus" @bind-SelectedStatus:after="HandleFiltersChanged" />
 
@@ -47,7 +38,6 @@
                 </button>
             }
         </div>
-
         <div class="inline-flex gap-2 rounded-full bg-[#121212] p-1">
             <button
                 class="cursor-pointer rounded-full px-4 py-2 font-medium transition duration-300 ease-in-out 
@@ -63,7 +53,6 @@
             </button>
         </div>
     </div>
-
     <div class="flex flex-col items-center gap-2">
         <RatingFilter @bind-SelectedRating="selectedRating" @bind-SelectedRating:after="HandleFiltersChanged" />
 
@@ -75,44 +64,37 @@
             </button>
         }
     </div>
-
     @if (isSearching)
     {
         <p>searching...</p>
     }
-
-    @if (!string.IsNullOrEmpty(errorMessage))
+    else if (!string.IsNullOrEmpty(errorMessage))
     {
         <p>@errorMessage</p>
     }
-
-    @if (response is not null && response.Data.Count == 0)
+    else if (response is not null && response.Data.Count == 0)
     {
         <p class="font-medium text-lg">no media saved yet.</p>
     }
-
-    @if (response is not null && response.Data.Count > 0)
+    else if (response is not null && response.Data.Count > 0)
     {
         <div class="grid grid-cols-6 gap-1">
             @foreach (var item in response.Data)
             {
                 <button class="border-0 bg-transparent p-0 text-left" @onclick="() => OpenMedia(item)">
-                    <MediaCard Title="@item.Title" Rating="@item.Rating" ImageUrl="@item.PosterPath" />
+                    <MediaCard @key="item.Id" Title="@item.Title" Rating="@item.Rating" ImageUrl="@item.PosterPath" />
                 </button>
             }
         </div>
-
         <div class="flex gap-4 items-center">
             <button
                 class="font-medium cursor-pointer disabled:cursor-not-allowed px-4 py-2 rounded-full bg-[#121212] hover:bg-[#212121] disabled:opacity-40 disabled:hover:bg-[#121212]"
                 disabled="@(!GoBack)" @onclick="GoToPreviousPage">
                 prev
             </button>
-
             <span class="text-sm font-medium text-neutral-400">
                 page @currentPage of @response.TotalPages
             </span>
-
             <button
                 class="font-medium cursor-pointer disabled:cursor-not-allowed  px-4 py-2 rounded-full bg-[#121212] hover:bg-[#212121] disabled:opacity-40 disabled:hover:bg-[#121212]"
                 disabled="@(!GoNext)" @onclick="GoToNextPage">
@@ -132,8 +114,8 @@
     private MediaStatus? mediaStatus;
     private MediaSortBy sortBy = MediaSortBy.RecentlyAdded;
     private bool isSearching;
-    private string? errorMessage;
     private CancellationTokenSource? debounce;
+    private string? errorMessage;
 
     private bool GoBack => currentPage > 1;
     private bool GoNext => response is not null && currentPage < response.TotalPages;
@@ -240,9 +222,7 @@
     private async Task GoToPreviousPage()
     {
         if (!GoBack)
-        {
             return;
-        }
 
         currentPage--;
         await LoadPage();
@@ -251,19 +231,14 @@
     private async Task GoToNextPage()
     {
         if (!GoNext)
-        {
             return;
-        }
 
         currentPage++;
         await LoadPage();
     }
 
-    private void OpenMedia(GetMediasResponse item)
-    {
-
+    private void OpenMedia(GetMediasResponse item) =>
         Nav.NavigateTo($"/details/{item.MediaType}/{item.ExternalId}?from=library");
-    }
 
     public void Dispose()
     {

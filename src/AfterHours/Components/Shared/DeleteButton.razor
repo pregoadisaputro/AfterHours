@@ -54,14 +54,11 @@
 </div>
 
 @code {
-    [Parameter]
-    public EventCallback OnDelete { get; set; }
-    private bool confirm;
+    [Parameter] public EventCallback OnDelete { get; set; }
+    private bool confirm = false;
 
     private async Task Confirm()
     {
-        confirm = false;
-
         await OnDelete.InvokeAsync();
     }
 
@@ -69,5 +66,4 @@
     {
         confirm = false;
     }
-
 }
