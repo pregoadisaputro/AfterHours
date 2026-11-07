@@ -1,15 +1,11 @@
 <div>
-
     <p class="text-5xl font-medium text-neutral-300">
         @(SelectedRating?.ToString("0") ?? "0")
     </p>
-
     <p class="mb-3 text-xs font-medium text-neutral-500">
         your rating
     </p>
-
     <div class="flex gap-1">
-
         @for (var i = 1; i <= 10; i++)
         {
             var value = (decimal)i;
@@ -17,10 +13,10 @@
             <button class="
                 cursor-pointer
                 text-4xl
-                transition
+                transition-all
                 duration-300
                 ease-in-out
-                hover:scale-110 @(SelectedRating >= value ? "text-white" : "text-neutral-600 hover:text-white")"
+                hover:scale-100 @(SelectedRating >= value ? "text-white" : "text-neutral-600 hover:text-white")"
                     @onclick="() => ToggleRating(value)">
                 ✪
             </button>
