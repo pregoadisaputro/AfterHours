@@ -1,26 +1,31 @@
-<div
-    class="relative flex flex-col h-full p-1.5 cursor-pointer rounded-[20px] hover:bg-[#212121] hover:scale-[1.03] hover:z-10 transition-transform duration-300 ease-in-out will-change-transform">
-    <div class="relative">
-        @if (!string.IsNullOrWhiteSpace(ImageUrl))
-        {
-            <img class="w-full border-2 border-[#212121] aspect-2/3 object-cover rounded-[14px]"
-                 src="@($"https://image.tmdb.org/t/p/w500{ImageUrl}")" alt="@Title">
-        }
-        @if (Rating.HasValue)
-        {
-            <div
-                class="absolute top-2.5 right-2.5 flex items-center gap-1 px-2.5 py-1 bg-black/60 backdrop-blur-xs rounded-full text-white shadow-none isolate">
-                <span class="text-sm font-bold tracking-tight">
-                    @Rating.Value.ToString("0")
-                </span>
-                <span>★</span>
-            </div>
-        }
+@if (Medias is null)
+{
+    <p>media is empty.</p>
+}
+else
+{
+    <div
+        class="relative flex flex-col h-full p-1.5 cursor-pointer rounded-[20px] hover:bg-[#212121] hover:scale-[1.03] hover:z-10 transition-transform duration-300 ease-in-out will-change-transform">
+        <div class="relative">
+            @if (!string.IsNullOrWhiteSpace(Medias.PosterPath))
+            {
+                <img class="w-full border-2 border-[#212121] aspect-2/3 object-cover rounded-[14px]"
+                     src="@($"https://image.tmdb.org/t/p/w500{Medias.PosterPath}")">
+            }
+            @if (Medias.Rating.HasValue)
+            {
+                <div
+                    class="absolute top-2.5 right-2.5 flex items-center gap-1 px-2.5 py-1 bg-black/60 backdrop-blur-xs rounded-full text-white shadow-none isolate">
+                    <span class="text-sm font-bold tracking-tight">
+                        @Medias.Rating.Value.ToString("0")
+                    </span>
+                    <span>★</span>
+                </div>
+            }
+        </div>
     </div>
-</div>
+}
 
 @code {
-    [Parameter] public string? Title { get; set; }
-    [Parameter] public decimal? Rating { get; set; }
-    [Parameter] public string? ImageUrl { get; set; }
+    [Parameter] public GetMediasResponse? Medias { get; set; }
 }
