@@ -1,42 +1,41 @@
-<div>
-    <h1 class="text-4xl font-bold">
-        @Title
-    </h1>
-
-    <div class="mt-3 flex items-center gap-2 text-sm text-neutral-400">
-
-        @if (ReleaseDate is not null)
+@if (Details is null)
+{
+    <p class="text-center">cannot load the details</p>
+}
+else
+{
+    <div>
+        @if (!string.IsNullOrWhiteSpace(Details.Title))
         {
-            <span>
-                @ReleaseDate.Value.Year
-            </span>
+            <h1 class="text-4xl font-bold">
+                @Details.Title
+            </h1>
         }
-
-        @if (Runtime is not null)
-        {
-            <span>•</span>
-            <span>@FormatRuntime(Runtime)</span>
-        }
+        <div class="mt-3 flex items-center gap-2 text-sm text-neutral-400">
+            @if (Details.ReleaseDate.HasValue)
+            {
+                <span>
+                    @Details.ReleaseDate
+                </span>
+            }
+            @if (Details.Runtime.HasValue)
+            {
+                <span>•</span>
+                <span>@FormatRuntime(Details.Runtime)</span>
+            }
+        </div>
     </div>
-</div>
 
-<p class="max-w-3xl text-sm leading-relaxed text-neutral-400">
-    @Overview
-</p>
+    @if (!string.IsNullOrWhiteSpace(Details.Overview))
+    {
+        <p class="max-w-3xl text-sm leading-relaxed text-neutral-400">
+            @Details.Overview
+        </p>
+    }
+}
 
 @code {
-
-    [Parameter]
-    public string? Title { get; set; }
-
-    [Parameter]
-    public DateOnly? ReleaseDate { get; set; }
-
-    [Parameter]
-    public int? Runtime { get; set; }
-
-    [Parameter]
-    public string? Overview { get; set; }
+    [Parameter] public GetDetailsResponse? Details { get; set; }
 
     private static string FormatRuntime(int? runtime)
     {
