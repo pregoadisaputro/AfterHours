@@ -6,7 +6,11 @@
 @inject DeleteMedia DeleteMedia
 @inject NavigationManager Nav
 
-@if (details is null)
+@if (!string.IsNullOrWhiteSpace(errorMessage))
+{
+    <p class="text-center text-red-500">@errorMessage</p>
+}
+else if (details is null)
 {
     <LoadingSpinner />
 }
@@ -14,17 +18,12 @@ else
 {
     <div class="min-h-screen bg-black">
         <div class="mx-auto max-w-6xl overflow-hidden rounded-xl bg-black">
-            <Backdrop BackdropPath="@details.BackdropPath" Title="@details.Title" OnBack="HandleBack" />
-
+            <Backdrop Details="details" OnBack="HandleBack" />
             <div class="space-y-8 p-8">
-                <Info Title="@details.Title" ReleaseDate="@details.ReleaseDate" Runtime="@details.Runtime"
-                      Overview="@details.Overview" />
-
+                <Info Details="details" />
                 <RatingSelector @bind-SelectedRating="selectedRating" @bind-SelectedRating:after="HandleRatingChanged" />
-
                 <div class="flex items-center justify-between">
                     <StatusToggle @bind-SelectedStatus="selectedStatus" @bind-SelectedStatus:after="HandleStatusChanged" />
-
                     @if (details.IsSaved)
                     {
                         <DeleteButton OnDelete="HandleDelete" />
@@ -43,6 +42,7 @@ else
     private GetDetailsResponse? details;
     private decimal? selectedRating;
     private MediaStatus? selectedStatus;
+    private string? errorMessage;
 
     protected override async Task OnParametersSetAsync()
     {
@@ -54,12 +54,21 @@ else
 
     private async Task ReloadDetails()
     {
-        details = await GetMediaDetails.GetAsync(
+        errorMessage = null;
+
+        var response = await GetMediaDetails.GetAsync(
             ParseMediaType(Type),
             Id);
 
-        selectedRating = details?.Rating;
-        selectedStatus = details?.MediaStatus;
+        if (response.IsFailure)
+        {
+            errorMessage = response.Error;
+            return;
+        }
+
+        details = response.Value;
+        selectedRating = details.Rating;
+        selectedStatus = details.MediaStatus;
     }
 
     private async Task HandleRatingChanged()
@@ -77,7 +86,13 @@ else
                 details.PosterPath,
                 selectedStatus ?? MediaStatus.Completed);
 
-            await CreateMedia.HandleAsync(request);
+            var response = await CreateMedia.HandleAsync(request);
+
+            if (response.IsFailure)
+            {
+                errorMessage = response.Error;
+                return;
+            }
         }
         else if (details.Id is not null)
         {
@@ -85,7 +100,13 @@ else
                 selectedRating,
                 details.MediaStatus ?? MediaStatus.Completed);
 
-            await UpdateMedia.HandleAsync(details.Id.Value, request);
+            var response = await UpdateMedia.HandleAsync(details.Id.Value, request);
+
+            if (response.IsFailure)
+            {
+                errorMessage = response.Error;
+                return;
+            }
         }
 
         await ReloadDetails();
@@ -108,7 +129,13 @@ else
                 details.PosterPath,
                 selectedStatus.Value);
 
-            await CreateMedia.HandleAsync(request);
+            var response = await CreateMedia.HandleAsync(request);
+
+            if (response.IsFailure)
+            {
+                errorMessage = response.Error;
+                return;
+            }
         }
         else if (details.Id is not null)
         {
@@ -116,7 +143,13 @@ else
                 selectedRating,
                 selectedStatus ?? MediaStatus.Planned);
 
-            await UpdateMedia.HandleAsync(details.Id.Value, request);
+            var response = await UpdateMedia.HandleAsync(details.Id.Value, request);
+
+            if (response.IsFailure)
+            {
+                errorMessage = response.Error;
+                return;
+            }
         }
 
         await ReloadDetails();
@@ -127,7 +160,14 @@ else
         if (details?.Id is null)
             return;
 
-        await DeleteMedia.HandleAsync(details.Id.Value);
+        var response = await DeleteMedia.HandleAsync(details.Id.Value);
+
+        if (response.IsFailure)
+        {
+            errorMessage = response.Error;
+            return;
+        }
+
         Nav.NavigateTo("/library");
     }
 
