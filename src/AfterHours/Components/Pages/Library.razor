@@ -72,17 +72,17 @@
     {
         <p>@errorMessage</p>
     }
-    else if (response is not null && response.Data.Count == 0)
+    else if (response is not null && response.Items.Count == 0)
     {
         <p class="font-medium text-lg">no media saved yet.</p>
     }
-    else if (response is not null && response.Data.Count > 0)
+    else if (response is not null && response.Items.Count > 0)
     {
         <div class="grid grid-cols-6 gap-1">
-            @foreach (var item in response.Data)
+            @foreach (var item in response.Items)
             {
                 <button class="border-0 bg-transparent p-0 text-left" @onclick="() => OpenMedia(item)">
-                    <MediaCard @key="item.Id" Title="@item.Title" Rating="@item.Rating" ImageUrl="@item.PosterPath" />
+                    <MediaCard @key="item.Id" Medias="item" />
                 </button>
             }
         </div>
@@ -105,9 +105,9 @@
 </div>
 
 @code {
-    private GetMediasPage? response;
+    private PagedResult<GetMediasResponse>? response;
     private int currentPage = 1;
-    private int pageSize = 24;
+    private int pageSize = 36;
     private string query = string.Empty;
     private decimal? selectedRating;
     private MediaType? mediaType;

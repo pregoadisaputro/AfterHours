@@ -34,7 +34,7 @@
                 @foreach (var item in results.Results)
                 {
                     <button class="border-0 bg-transparent p-0 text-left" @onclick="() => HandleOpenMedia(item)">
-                        <MediaCard @key="item.Id" Title="@(item.Title ?? item.Name)" ImageUrl="@item.PosterPath" />
+                        <TmdbCard @key="item.Id" Medias="item" />
                     </button>
                 }
             </div>
