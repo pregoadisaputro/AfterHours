@@ -1,6 +1,7 @@
 using AfterHours.Data;
 using AfterHours.Data.Entity;
 using AfterHours.Data.Enum;
+using AfterHours.Features.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace AfterHours.Features.Media;
@@ -16,7 +17,10 @@ public record CreateMediaRequest(
 
 public sealed class CreateMedia(IDbContextFactory<AppDbContext> db, ILogger<CreateMedia> logger)
 {
-    public async Task HandleAsync(CreateMediaRequest request, CancellationToken ct = default)
+    public async Task<Result> HandleAsync(
+        CreateMediaRequest request,
+        CancellationToken ct = default
+    )
     {
         await using var dbCtx = await db.CreateDbContextAsync(ct);
 
@@ -34,7 +38,7 @@ public sealed class CreateMedia(IDbContextFactory<AppDbContext> db, ILogger<Crea
                 request.ExternalId,
                 request.MediaType
             );
-            return;
+            return Result.Failure("Media is already exist.");
         }
 
         var newMedia = new MediaItem
@@ -47,9 +51,19 @@ public sealed class CreateMedia(IDbContextFactory<AppDbContext> db, ILogger<Crea
             MediaStatus = request.MediaStatus,
         };
 
-        dbCtx.MediaItems.Add(newMedia);
-        await dbCtx.SaveChangesAsync(ct);
+        try
+        {
+            dbCtx.MediaItems.Add(newMedia);
+            await dbCtx.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException ex)
+        {
+            logger.LogError(ex, "Database error occurred while creating media.");
+            return Result.Failure("Unable to save media, Please try again.");
+        }
 
         logger.LogInformation("Created media with ID {MediaId}", newMedia.Id);
+
+        return Result.Success();
     }
 }

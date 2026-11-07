@@ -2,6 +2,7 @@ namespace AfterHours.Features.Media;
 
 using AfterHours.Data;
 using AfterHours.Data.Enum;
+using AfterHours.Features.Shared;
 using Microsoft.EntityFrameworkCore;
 
 public enum MediaSortBy
@@ -20,14 +21,6 @@ public record GetMediasRequest(
     MediaSortBy SortBy = MediaSortBy.RecentlyAdded
 );
 
-public record GetMediasPage(
-    int PageNumber,
-    int PageSize,
-    int TotalItems,
-    int TotalPages,
-    IReadOnlyList<GetMediasResponse> Data
-);
-
 public record GetMediasResponse(
     int Id,
     int ExternalId,
@@ -40,19 +33,11 @@ public record GetMediasResponse(
 
 public sealed class GetMedias(IDbContextFactory<AppDbContext> db)
 {
-    public async Task<GetMediasPage> GetAsync(
+    public async Task<PagedResult<GetMediasResponse>> GetAsync(
         GetMediasRequest request,
         CancellationToken ct = default
     )
     {
-        var pageNumber = request.PageNumber < 1 ? 1 : request.PageNumber;
-        var pageSize = request.PageSize switch
-        {
-            < 1 => 24,
-            > 100 => 100,
-            _ => request.PageSize,
-        };
-
         await using var dbCtx = await db.CreateDbContextAsync(ct);
 
         var query = dbCtx.MediaItems.AsNoTracking();
@@ -85,24 +70,21 @@ public sealed class GetMedias(IDbContextFactory<AppDbContext> db)
             _ => query.OrderByDescending(m => m.CreatedAt).ThenBy(m => m.Id),
         };
 
-        var totalItems = await query.CountAsync(ct);
-        var skip = (pageNumber - 1) * pageSize;
-        var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+        var items = query.Select(m => new GetMediasResponse(
+            m.Id,
+            m.ExternalId,
+            m.Rating,
+            m.Title,
+            m.PosterPath,
+            m.MediaType,
+            m.MediaStatus
+        ));
 
-        var response = await query
-            .Skip(skip)
-            .Take(pageSize)
-            .Select(m => new GetMediasResponse(
-                m.Id,
-                m.ExternalId,
-                m.Rating,
-                m.Title,
-                m.PosterPath,
-                m.MediaType,
-                m.MediaStatus
-            ))
-            .ToListAsync(ct);
-
-        return new GetMediasPage(pageNumber, pageSize, totalItems, totalPages, response);
+        return await PagedResult<GetMediasResponse>.CreateAsync(
+            items,
+            request.PageNumber,
+            request.PageSize,
+            ct
+        );
     }
 }

@@ -1,6 +1,7 @@
 using System.Globalization;
 using AfterHours.Data;
 using AfterHours.Data.Enum;
+using AfterHours.Features.Shared;
 using AfterHours.Services.Tmdb;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +24,7 @@ public record GetDetailsResponse(
 
 public sealed class GetMediaDetails(IDbContextFactory<AppDbContext> db, TmdbService tmdbService)
 {
-    public async Task<GetDetailsResponse?> GetAsync(
+    public async Task<Result<GetDetailsResponse>> GetAsync(
         MediaType mediaType,
         int externalId,
         CancellationToken ct = default
@@ -41,9 +42,9 @@ public sealed class GetMediaDetails(IDbContextFactory<AppDbContext> db, TmdbServ
             var movie = await tmdbService.GetMovieDetailsAsync(externalId, ct);
 
             if (movie is null)
-                return null;
+                return Result<GetDetailsResponse>.Failure("Movie was not found or empty.");
 
-            return new GetDetailsResponse(
+            var movieDetails = new GetDetailsResponse(
                 media?.Id,
                 externalId,
                 media?.Rating,
@@ -57,14 +58,16 @@ public sealed class GetMediaDetails(IDbContextFactory<AppDbContext> db, TmdbServ
                 media?.MediaStatus,
                 media != null
             );
+
+            return Result<GetDetailsResponse>.Success(movieDetails);
         }
 
         var tv = await tmdbService.GetTvDetailsAsync(externalId, ct);
 
         if (tv is null)
-            return null;
+            return Result<GetDetailsResponse>.Failure("TV was not found or empty.");
 
-        return new GetDetailsResponse(
+        var tvDetails = new GetDetailsResponse(
             media?.Id,
             externalId,
             media?.Rating,
@@ -78,6 +81,8 @@ public sealed class GetMediaDetails(IDbContextFactory<AppDbContext> db, TmdbServ
             media?.MediaStatus,
             media != null
         );
+
+        return Result<GetDetailsResponse>.Success(tvDetails);
     }
 
     private static DateOnly? ParseDate(string? value) =>

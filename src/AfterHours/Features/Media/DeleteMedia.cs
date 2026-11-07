@@ -1,11 +1,12 @@
 using AfterHours.Data;
+using AfterHours.Features.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace AfterHours.Features.Media;
 
 public sealed class DeleteMedia(IDbContextFactory<AppDbContext> db, ILogger<DeleteMedia> logger)
 {
-    public async Task HandleAsync(int id, CancellationToken ct = default)
+    public async Task<Result> HandleAsync(int id, CancellationToken ct = default)
     {
         await using var dbCtx = await db.CreateDbContextAsync(ct);
 
@@ -14,9 +15,10 @@ public sealed class DeleteMedia(IDbContextFactory<AppDbContext> db, ILogger<Dele
         if (deleteCount == 0)
         {
             logger.LogWarning("Trying to deleting non-existing media with ID {MediaId}", id);
-            return;
+            return Result.Failure("Media was not found or empty.");
         }
 
-        logger.LogInformation("Deleted {Count} media", deleteCount);
+        logger.LogInformation("Deleted media: {Count} & ID: {MediaId}", deleteCount, id);
+        return Result.Success();
     }
 }
