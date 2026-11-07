@@ -1,0 +1,21 @@
+@if (Medias is null)
+{
+    <p>media is empty.</p>
+}
+else
+{
+    <div
+        class="relative flex flex-col h-full p-1.5 cursor-pointer rounded-[20px] hover:bg-[#212121] hover:scale-[1.03] hover:z-10 transition-transform duration-300 ease-in-out will-change-transform">
+        <div class="relative">
+            @if (!string.IsNullOrWhiteSpace(Medias.PosterPath))
+            {
+                <img class="w-full border-2 border-[#212121] aspect-2/3 object-cover rounded-[14px]"
+                     src="@($"https://image.tmdb.org/t/p/w500{Medias.PosterPath}")">
+            }
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter] public TmdbSearchDto? Medias { get; set; }
+}
